@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lancaster University International Study Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#b5121b;
+    --dark:#1a1a1a;
+    --white:#ffffff;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:'Poppins', Arial, sans-serif;
+    color:var(--dark);
+  }
+
+  /* ===== utility bar ===== */
+  .utility-bar{
+    display:flex;
+    align-items:center;
+    gap:40px;
+    padding:16px 40px;
+    border-bottom:1px solid #eee;
+  }
+  .utility-logo{ height:52px; flex-shrink:0; }
+  .utility-logo img{ height:100%; width:auto; display:block; }
+
+  .search-box{
+    display:flex;
+    align-items:stretch;
+    border:1.5px solid #1a1a1a;
+    border-radius:4px;
+    overflow:hidden;
+    width:320px;
+    flex-shrink:0;
+  }
+  .search-box input{
+    border:none;
+    outline:none;
+    padding:10px 14px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    color:var(--dark);
+    width:100%;
+  }
+  .search-box button{
+    background:var(--red);
+    border:none;
+    width:44px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .search-box button svg{ width:16px; height:16px; }
+  .search-box button svg circle,
+  .search-box button svg line{ stroke:var(--white); }
+
+  .utility-spacer{ flex:1; }
+
+  .right-controls{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex-shrink:0;
+  }
+  .apply-btn{
+    border:1.5px solid var(--dark);
+    border-radius:4px;
+    background:var(--white);
+    color:var(--dark);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:9px 26px;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .lang-select{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:600;
+    font-size:15px;
+    color:var(--dark);
+    cursor:pointer;
+    user-select:none;
+  }
+  .lang-select svg.globe{ width:20px; height:20px; }
+  .lang-select svg.globe circle,
+  .lang-select svg.globe path,
+  .lang-select svg.globe line{ stroke:var(--dark); fill:none; }
+  .lang-select svg.chev{ width:10px; height:10px; }
+  .lang-select svg.chev path{ stroke:var(--dark); stroke-width:1.6; fill:none; }
+
+  @media (max-width:900px){
+    .utility-bar{ flex-wrap:wrap; gap:16px; padding:16px 20px; }
+    .search-box{ order:3; width:100%; }
+    .utility-spacer{ display:none; }
+  }
+
+  /* ===== top nav ===== */
+  .navbar{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:34px;
+    background:var(--white);
+    padding:22px 40px;
+    z-index:20;
+  }
+  .nav-item{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    font-size:16px;
+    color:var(--dark);
+    cursor:pointer;
+    padding-bottom:14px;
+    user-select:none;
+  }
+  .nav-item .chevron{ width:10px; height:10px; transition:transform .2s ease; }
+  .nav-item.open{ color:var(--red); }
+  .nav-item.open .chevron{ transform:rotate(180deg); }
+  .nav-item.open::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:3px;
+    background:var(--red);
+  }
+  .nav-item.no-caret{ font-weight:600; }
+  .dropdown{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width:230px;
+    background:var(--white);
+    box-shadow:0 18px 30px rgba(0,0,0,0.18);
+    padding:6px 0;
+    z-index:30;
+  }
+  .nav-item.open .dropdown{ display:block; }
+  .dropdown a{
+    display:block;
+    padding:16px 24px;
+    font-size:15px;
+    font-weight:400;
+    color:var(--dark);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .dropdown a:hover{ background:#f5f5f5; color:var(--red); }
+  .dropdown a.current{ color:var(--red); font-weight:600; }
+  .chevron path{ stroke:var(--red); stroke-width:1.6; fill:none; }
+
+  @media (max-width:700px){
+    .navbar{ flex-wrap:wrap; gap:18px; padding:18px 20px; }
+  }
+
+  /* ===== page banner ===== */
+  .banner{
+    width:100%;
+    height:clamp(220px, 34vw, 480px);
+    overflow:hidden;
+    background:#e5e5e5;
+    position:relative;
+  }
+  .banner img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 40%;
+    display:block;
+  }
+  .banner-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    color:#777;
+    background:#eee;
+  }
+  .banner-fallback code{
+    background:#ddd;
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:14px;
+  }
+
+  /* ===== page heading ===== */
+  .page-intro{
+    padding:36px 60px 50px;
+    max-width:1150px;
+  }
+  .page-intro h1{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(32px, 4vw, 52px);
+    margin:0 0 18px;
+    color:var(--dark);
+  }
+  .page-intro p{
+    font-size:17px;
+    line-height:1.5;
+    color:#333;
+    margin:0 0 26px;
+  }
+  .explore-btn-top{
+    display:inline-block;
+    background:var(--red);
+    color:var(--white);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:12px 22px;
+    text-decoration:none;
+    border-radius:3px;
+  }
+
+  .section-heading{
+    padding:10px 60px 0;
+    max-width:1300px;
+  }
+  .section-heading h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0;
+    color:var(--dark);
+  }
+
+  @media (max-width:700px){
+    .page-intro{ padding:28px 24px 40px; }
+    .section-heading{ padding:10px 24px 0; }
+  }
+
+  /* ===== tuition fees table ===== */
+  .fees-section{
+    padding:24px 60px 20px;
+    max-width:1150px;
+  }
+  .fees-section > p{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin:0 0 28px;
+  }
+  .fees-section h3{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:20px;
+    margin:0 0 20px;
+    color:var(--dark);
+  }
+  .fees-table{
+    width:100%;
+    border-collapse:collapse;
+    border:1px solid #ddd;
+  }
+  .fees-table th,
+  .fees-table td{
+    border:1px solid #ddd;
+    padding:18px 22px;
+    text-align:left;
+    font-size:15px;
+    color:#222;
+  }
+  .fees-table th{
+    font-weight:700;
+    color:var(--dark);
+  }
+  .fees-table td:first-child{ font-weight:400; }
+
+  @media (max-width:700px){
+    .fees-section{ padding:20px 24px 10px; }
+    .fees-table{ display:block; overflow-x:auto; white-space:nowrap; }
+  }
+
+  /* ===== additional fees accordion ===== */
+  .additional-fees{
+    padding:10px 60px 60px;
+    max-width:1150px;
+  }
+  .additional-fees h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0 0 26px;
+    color:var(--dark);
+  }
+  .accordion-item{
+    border-top:1px solid #ddd;
+  }
+  .accordion-item:last-child{ border-bottom:1px solid #ddd; }
+  .accordion-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 4px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .accordion-header h4{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:19px;
+    color:#4a4a4a;
+    margin:0;
+  }
+  .accordion-header svg{
+    width:18px; height:18px;
+    flex-shrink:0;
+    transition:transform .2s ease;
+  }
+  .accordion-header svg path{ stroke:#4a4a4a; stroke-width:2; fill:none; }
+  .accordion-item.open .accordion-header svg{ transform:rotate(180deg); }
+  .accordion-body{
+    display:none;
+    padding:0 4px 24px;
+    font-size:15px;
+    line-height:1.6;
+    color:#333;
+  }
+  .accordion-item.open .accordion-body{ display:block; }
+
+  @media (max-width:700px){
+    .additional-fees{ padding:10px 24px 44px; }
+  }
+
+  /* ===== scholarships section ===== */
+  .scholarships-section{
+    padding:0 60px 20px;
+    max-width:1150px;
+  }
+  .scholarships-section h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(28px, 3.4vw, 40px);
+    margin:0 0 26px;
+    color:var(--dark);
+  }
+  .scholarships-section > p{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin:0 0 22px;
+  }
+  .check-list{
+    list-style:none;
+    margin:6px 0 40px;
+    padding:0;
+  }
+  .check-list li{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-weight:700;
+    font-size:16px;
+    color:#1a1a1a;
+    margin-bottom:14px;
+  }
+  .check-list svg{
+    width:26px; height:26px;
+    flex-shrink:0;
+  }
+
+  .scholarships-section h3.sub-heading{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(22px, 2.4vw, 28px);
+    margin:0 0 22px;
+    color:var(--dark);
+  }
+  .scholarships-section ul.bullet-list{
+    margin:0 0 22px;
+    padding-left:22px;
+  }
+  .scholarships-section ul.bullet-list li{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin-bottom:12px;
+  }
+  .scholarships-section ul.bullet-list li strong{
+    color:#1a1a1a;
+    font-weight:700;
+  }
+  .scholarships-section ul.sub-bullet-list{
+    list-style:circle;
+    margin:10px 0 12px;
+    padding-left:22px;
+  }
+  .scholarships-section ul.sub-bullet-list li{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin-bottom:10px;
+  }
+  .outline-btn{
+    display:inline-block;
+    background:#fff;
+    color:var(--red);
+    border:1.5px solid var(--red);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:12px 24px;
+    border-radius:3px;
+    text-decoration:none;
+    margin-top:10px;
+  }
+
+  @media (max-width:700px){
+    .scholarships-section{ padding:0 24px 20px; }
+  }
+
+  /* ===== horizontal testimonial ===== */
+  .testimonial-section{
+    padding:20px 60px 0;
+    max-width:1300px;
+  }
+  .testimonial-section h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0 0 26px;
+    color:var(--dark);
+  }
+  .testimonial-horiz{
+    display:flex;
+    border:1px solid #ddd;
+    align-items:stretch;
+  }
+  .testimonial-horiz-photo{
+    width:min(30%, 340px);
+    flex-shrink:0;
+    aspect-ratio:4/3;
+    background:#e5e5e5;
+    overflow:hidden;
+    position:relative;
+  }
+  .testimonial-horiz-photo img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+  .testimonial-horiz-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:14px;
+    font-size:13px;
+    line-height:1.5;
+    color:#888;
+    background:#eee;
+  }
+  .testimonial-horiz-fallback code{
+    background:#ddd;
+    padding:1px 5px;
+    border-radius:3px;
+    font-size:12px;
+  }
+  .testimonial-horiz-body{
+    padding:30px 36px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .testimonial-horiz-name{
+    margin:0 0 18px;
+    font-size:20px;
+  }
+  .testimonial-horiz-name strong{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    color:var(--dark);
+    font-size:26px;
+  }
+  .testimonial-horiz-name span{
+    color:#8a8a8a;
+    font-size:15px;
+    margin-left:10px;
+    padding-left:10px;
+    border-left:1px solid #ccc;
+  }
+  .testimonial-horiz-quote{
+    font-size:16px;
+    line-height:1.6;
+    color:#1a1a1a;
+    margin:0 0 18px;
+  }
+  .testimonial-horiz-meta{
+    font-size:15px;
+    color:#8a8a8a;
+    margin:0 0 6px;
+  }
+
+  @media (max-width:800px){
+    .testimonial-horiz{ flex-direction:column; }
+    .testimonial-horiz-photo{ width:100%; }
+  }
+  @media (max-width:700px){
+    .testimonial-section{ padding:16px 24px 0; }
+  }
+
+  /* ===== CTA banner ===== */
+  .cta-banner{
+    margin:44px 60px 60px;
+    border:1.5px solid var(--red);
+    padding:56px 40px;
+    text-align:center;
+    max-width:1300px;
+  }
+  .cta-banner h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(24px, 3vw, 34px);
+    color:var(--red);
+    margin:0 0 30px;
+  }
+  .cta-btn{
+    display:inline-block;
+    background:var(--red);
+    color:#fff;
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:14px 26px;
+    border:none;
+    border-radius:4px;
+    text-decoration:none;
+    cursor:pointer;
+  }
+
+  @media (max-width:700px){
+    .cta-banner{ margin:36px 24px 50px; padding:40px 22px; }
+  }
+
+  /* ===== Footer ===== */
+  .site-footer{
+    background:#141414;
+    color:#e6e6e6;
+    padding:36px 40px 30px;
+    margin-top:20px;
+  }
+  .footer-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:34px;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer-partner{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .footer-partner span{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:#e6e6e6;
+  }
+  .into-logo{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:26px;
+    letter-spacing:.5px;
+    color:#fff;
+  }
+  .into-logo svg{ width:26px; height:26px; }
+  .footer-social{
+    display:flex;
+    gap:10px;
+  }
+  .footer-social a{
+    width:38px; height:38px;
+    border-radius:6px;
+    background:rgba(255,255,255,0.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .footer-social svg{ width:18px; height:18px; fill:#fff; }
+  .footer-social a:nth-child(2) svg{ width:20px; height:20px; }
+
+  .footer-legal p{
+    font-size:15px;
+    line-height:1.7;
+    margin:0 0 20px 0;
+    color:#e6e6e6;
+  }
+  .footer-legal strong{ font-weight:700; color:#fff; }
+
+  .footer-bottom{
+    font-size:14px;
+    line-height:1.8;
+    color:#bdbdbd;
+    padding-top:18px;
+  }
+  .footer-bottom a{
+    color:#e6e6e6;
+    text-decoration:underline;
+  }
+  .footer-bottom a:hover{ color:#fff; }
+</style>
+</head>
+<body>
+
+<div class="utility-bar">
+  <div class="utility-logo">
+    <img src="./Screenshot 2026-07-17 145528.png" alt="International Study Centre | Lancaster University">
+  </div>
+
+  <div class="search-box">
+    <input type="text" placeholder="Search programmes">
+    <button aria-label="Search">
+      <svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="6.5" fill="none" stroke-width="2"/><line x1="14" y1="14" x2="19" y2="19" stroke-width="2"/></svg>
+    </button>
+  </div>
+
+  <div class="utility-spacer"></div>
+
+  <div class="right-controls">
+    <a href="#" class="apply-btn">Apply</a>
+    <div class="lang-select">
+      <svg class="globe" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke-width="1.5"/><path d="M2 10h16M10 2c2.5 2.5 2.5 13 0 16M10 2c-2.5 2.5-2.5 13 0 16" stroke-width="1.5"/></svg>
+      <span>En</span>
+      <svg class="chev" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-item" data-menu="about">
+    About
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsitabout.html">Student success</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="study">
+    Study
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitourwebsiteug.html">Undergraduate</a>
+      <a href="./visitwebsitepg.html">Postgraduate</a>
+      <a href="./visitwebsiteenglish.html">English Language</a>
+      <a href="./visitwebsiteteacher.html"> teachers</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="student-life">
+    Student life
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsiteliving.html">Living</a>
+      <a href="./visitwebsiteaccomadation.html">Accommodation</a>
+      <a href="./visitwebsiteemployabily.html">Employability</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="support">
+    Support
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsitetution.html">Tuition and scholarships</a>
+      <a href="./visitwebsitearrival.html">Pre-arrival</a>
+      <a href="./visitwebsiteapply.html">How to apply</a>
+      <a href="./visitwebsitevisa.html">Visa</a>
+    </div>
+  </div>
+
+  <div class="nav-item no-caret" data-menu="">
+   <a href="./visitcontact.html">Contact</a> 
+  </div>
+</nav>
+
+<div class="banner">
+  <!-- Replace with your own photo, e.g. "./tuition-banner.jpg" -->
+  <img src="./Screenshot 2026-07-17 162120.png" alt="Students in a lecture taking notes" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+  <div class="banner-fallback">Add photo as <code>tuition-banner.jpg</code></div>
+</div>
+
+<div class="page-intro">
+  <h1>Tuition fees and scholarships</h1>
+  <p>Studying abroad is a valuable investment in your future. Explore our tuition fees and discover scholarship opportunities that could help support your education.</p>
+  <a href="#" class="explore-btn-top">Scholarship options</a>
+</div>
+
+<div class="section-heading">
+  <h2>Tuition fees</h2>
+</div>
+
+<div class="fees-section">
+  <p>The cost of our programmes vary based on programme type and length of study.</p>
+  <h3>Tuition fees for the 2026/27 academic year</h3>
+
+  <table class="fees-table">
+    <thead>
+      <tr>
+        <th>Programmes</th>
+        <th>1 term</th>
+        <th>2 terms</th>
+        <th>3 terms</th>
+        <th>4 terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>International Foundation</td>
+        <td></td>
+        <td></td>
+        <td>&pound;19,995</td>
+        <td>&pound;22,500</td>
+      </tr>
+      <tr>
+        <td>International Year One</td>
+        <td></td>
+        <td></td>
+        <td>&pound;15,500</td>
+        <td>&pound;17,500</td>
+      </tr>
+      <tr>
+        <td>Pre-Master's</td>
+        <td></td>
+        <td>&pound;15,750</td>
+        <td>&pound;19,995</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Academic English</td>
+        <td>&pound;5,750</td>
+        <td>&pound;11,500</td>
+        <td>&pound;17,250</td>
+        <td>&pound;23,000</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="additional-fees">
+  <h2>Additional fees</h2>
+
+  <div class="accordion-item" data-accordion>
+    <div class="accordion-header">
+      <h4>Insurance</h4>
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="accordion-body">
+      <p>Details about insurance costs and requirements go here.</p>
+    </div>
+  </div>
+
+  <div class="accordion-item" data-accordion>
+    <div class="accordion-header">
+      <h4>Immigration Health Surcharge</h4>
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="accordion-body">
+      <p>Details about the Immigration Health Surcharge go here.</p>
+    </div>
+  </div>
+
+  <div class="accordion-item" data-accordion>
+    <div class="accordion-header">
+      <h4>Other programme costs</h4>
+      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+    <div class="accordion-body">
+      <p>Details about other programme costs go here.</p>
+    </div>
+  </div>
+</div>
+
+<div class="scholarships-section">
+  <h2>Scholarships</h2>
+  <p>Are you an ambitious international student? Do you have an offer to study an academic programme at Lancaster University International Study Centre? If so, you could be eligible to receive up to &pound;3,000 towards your tuition fees.</p>
+  <p>And, once you start your Lancaster University degree, more scholarships will be offered.</p>
+
+  <ul class="check-list">
+    <li>
+      <svg viewBox="0 0 24 24"><rect x="1" y="1" width="22" height="22" rx="3" fill="#b5121b"/><path d="M6 12.5l4 4 8-8.5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      For outstanding students
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24"><rect x="1" y="1" width="22" height="22" rx="3" fill="#b5121b"/><path d="M6 12.5l4 4 8-8.5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Up to &pound;3,000 savings
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24"><rect x="1" y="1" width="22" height="22" rx="3" fill="#b5121b"/><path d="M6 12.5l4 4 8-8.5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      One-off tuition fee discount
+    </li>
+  </ul>
+
+  <h2>Which scholarships are available?</h2>
+  <h3 class="sub-heading">Regional Scholarship</h3>
+  <p>Up to &pound;3,000 one-off tuition fee reduction for your first year at Lancaster University International Study Centre.</p>
+  <p>To be considered, you must hold an offer to study an academic pathway programme at Lancaster University International Study Centre.</p>
+  <p>Scholarship availability and value may vary. If applying through an education counsellor, contact them for more information. For all other students, apply via the centre after accepting your offer.</p>
+
+  <h3 class="sub-heading">Progression scholarships</h3>
+  <p>Lancaster University offers a range of scholarships when you continue to your degree, which may include:</p>
+
+  <ul class="bullet-list">
+    <li><strong>Global Progression Award (undergraduate):</strong> &pound;3,000 per year of study.</li>
+    <li><strong>Regional Progression Award (undergraduate):</strong> &pound;3,000 per year of study. This scholarship award can be combined with the Global Progression Award, so students can receive up to &pound;6,000 per year.</li>
+  </ul>
+
+  <p>The Regional Progression Award is open to students from Bangladesh, Egypt, Ghana, Indonesia, Kenya, Malaysia, Nepal, Nigeria, Pakistan, Sri Lanka, Taiwan, Thailand, Turkey and Vietnam who meet the progression requirements of the International Foundation programme.</p>
+
+  <ul class="bullet-list">
+    <li><strong>Master's Excellence Scholarship (postgraduate):</strong> up to 30% off the programme fee depending on Faculty, as follows:
+      <ul class="sub-bullet-list">
+        <li>Management School: up to 20%</li>
+        <li>Science and Technology: up to 30%</li>
+        <li>Humanities, Arts and Social Sciences: 20%</li>
+        <li>Health and Medicine: 25%</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>Terms, conditions and eligibility criteria apply.</p>
+
+  <a href="#" class="outline-btn">Visit the university website</a>
+</div>
+
+<div class="testimonial-section">
+  <h2>What our students say</h2>
+
+  <div class="testimonial-horiz">
+    <div class="testimonial-horiz-photo">
+      <!-- Replace with your own photo, e.g. "./student-amran.jpg" -->
+      <img src="./INTO_LAN_ISC_IF_Amran_Testimonial_photo.avif" alt="Amran" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="testimonial-horiz-fallback">Add photo as <code>student-amran.jpg</code></div>
+    </div>
+    <div class="testimonial-horiz-body">
+      <p class="testimonial-horiz-name"><strong>Amran</strong><span>Ethiopia</span></p>
+      <p class="testimonial-horiz-quote">&ldquo;Lancaster is one of the best universities for astrophysics. The International Study Centre helped me secure a place here. They offered me a scholarship, making my decision easy!&rdquo;</p>
+      <p class="testimonial-horiz-meta">Pathway: International Foundation in Engineering, Computing and Mathematics</p>
+      <p class="testimonial-horiz-meta">Degree: BSc (Hons) Physics with Astrophysics</p>
+    </div>
+  </div>
+</div>
+
+<div class="cta-banner">
+  <h2>Find your best route to Lancaster University</h2>
+  <a href="#" class="cta-btn">Explore programmes</a>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-partner">
+      <span>IN PARTNERSHIP WITH</span>
+      <div class="into-logo">
+        INTO
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="11" stroke="#fff" stroke-width="1.6"/>
+          <path d="M8 7l4.5 5-4.5 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M13 7l4.5 5-4.5 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/lancasteruniversityisc/?locale=en_GB" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 38.49 67.56"><path d="M8.71,39.5v28.07h15.31v-28.07h11.42l2.37-12.91h-13.79v-4.57c0-6.82,2.68-9.43,9.6-9.43,2.15,0,3.88.05,4.88.16V1.05c-1.89-.52-6.51-1.05-9.17-1.05C15.21,0,8.71,6.67,8.71,21.04v5.55H0v12.91h8.71Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/lancasteruni_isc/" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 68.71 68.69"><path d="M61.14,54.6c-1.19,3-3.51,5.32-6.53,6.53-4.52,1.8-15.25,1.38-20.25,1.38s-15.74.4-20.25-1.38c-3-1.19-5.32-3.51-6.53-6.53-1.8-4.52-1.38-15.25-1.38-20.25s-.4-15.74,1.38-20.25c1.19-3,3.51-5.32,6.53-6.53,4.52-1.8,15.25-1.38,20.25-1.38s15.74-.4,20.25,1.38c3,1.19,5.32,3.51,6.53,6.53,1.8,4.52,1.38,15.25,1.38,20.25s.41,15.74-1.38,20.25M68.47,20.18c-.26-5.5-1.52-10.38-5.55-14.39C58.9,1.78,54.03.52,48.53.24,42.86-.08,25.85-.08,20.18.24c-5.49.26-10.36,1.52-14.39,5.53C1.76,9.79.52,14.67.24,20.17-.08,25.84-.08,42.84.24,48.51c.26,5.5,1.52,10.38,5.55,14.39,4.03,4.02,8.89,5.27,14.39,5.55,5.67.32,22.67.32,28.34,0,5.5-.26,10.38-1.52,14.39-5.55,4.02-4.02,5.27-8.89,5.55-14.39.32-5.67.32-22.65,0-28.32M56.8,16.01c0,2.29-1.84,4.11-4.11,4.11s-4.11-1.84-4.11-4.11,1.84-4.11,4.11-4.11,4.11,1.84,4.11,4.11M34.36,45.8c-6.3,0-11.45-5.14-11.45-11.45s5.14-11.45,11.45-11.45,11.45,5.14,11.45,11.45-5.15,11.45-11.45,11.45M34.36,16.73c-9.75,0-17.61,7.87-17.61,17.61s7.87,17.61,17.61,17.61,17.61-7.86,17.61-17.61-7.87-17.61-17.61-17.61"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <p><strong>INTO Lancaster Limited</strong>, trading as Lancaster University International Study Centre, is a limited liability partnership registered in England and Wales, registered number 14819227</p>
+    <p><strong>Registered Office:</strong> One Gloucester Place, Brighton, East Sussex, BN1 4AA, UK</p>
+    <p><strong>VAT registration number:</strong> 123 4160 57</p>
+    <p><strong>Education provider sponsor number 6FY6FQBV1</strong>, INTO Lancaster Limited is a teaching site on the Sponsor Licence of INTO Manchester Limited</p>
+  </div>
+
+  <div class="footer-bottom">
+    &copy; Copyright 2026 | INTO UNIVERSITY PARTNERSHIPS LTD AND IUP 2 LLP <a href="#">&#27801;ICP&#22791;14028023&#21495;-3</a> | <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Cookies Policy</a> | <a href="#">Governance</a> | <a href="#">Accessibility</a> | <a href="#">Modern Slavery</a>
+  </div>
+</footer>
+
+<script>
+  const accordions = document.querySelectorAll('[data-accordion]');
+  accordions.forEach(item => {
+    item.querySelector('.accordion-header').addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
+  });
+
+  const items = document.querySelectorAll('.nav-item[data-menu]');
+  items.forEach(item => {
+    const menuName = item.getAttribute('data-menu');
+    if(!menuName) return;
+    item.addEventListener('click', (e) => {
+      const isOpen = item.classList.contains('open');
+      items.forEach(i => i.classList.remove('open'));
+      if(!isOpen){ item.classList.add('open'); }
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click', () => {
+    items.forEach(i => i.classList.remove('open'));
+  });
+</script>
+</body>
+</html>

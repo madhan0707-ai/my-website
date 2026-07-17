@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Living in Lancaster - Lancaster University ISC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#b5121b;
+    --dark:#1a1a1a;
+    --white:#ffffff;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:'Poppins', Arial, sans-serif;
+    color:var(--dark);
+  }
+
+  /* ===== utility bar ===== */
+  .utility-bar{
+    display:flex;
+    align-items:center;
+    gap:40px;
+    padding:16px 40px;
+    border-bottom:1px solid #eee;
+  }
+  .utility-logo{ height:52px; flex-shrink:0; }
+  .utility-logo img{ height:100%; width:auto; display:block; }
+
+  .search-box{
+    display:flex;
+    align-items:stretch;
+    border:1.5px solid #1a1a1a;
+    border-radius:4px;
+    overflow:hidden;
+    width:320px;
+    flex-shrink:0;
+  }
+  .search-box input{
+    border:none;
+    outline:none;
+    padding:10px 14px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    color:var(--dark);
+    width:100%;
+  }
+  .search-box button{
+    background:var(--red);
+    border:none;
+    width:44px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .search-box button svg{ width:16px; height:16px; }
+  .search-box button svg circle,
+  .search-box button svg line{ stroke:var(--white); }
+
+  .utility-spacer{ flex:1; }
+
+  .right-controls{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex-shrink:0;
+  }
+  .apply-btn{
+    border:1.5px solid var(--dark);
+    border-radius:4px;
+    background:var(--white);
+    color:var(--dark);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:9px 26px;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .lang-select{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:600;
+    font-size:15px;
+    color:var(--dark);
+    cursor:pointer;
+    user-select:none;
+  }
+  .lang-select svg.globe{ width:20px; height:20px; }
+  .lang-select svg.globe circle,
+  .lang-select svg.globe path,
+  .lang-select svg.globe line{ stroke:var(--dark); fill:none; }
+  .lang-select svg.chev{ width:10px; height:10px; }
+  .lang-select svg.chev path{ stroke:var(--dark); stroke-width:1.6; fill:none; }
+
+  @media (max-width:900px){
+    .utility-bar{ flex-wrap:wrap; gap:16px; padding:16px 20px; }
+    .search-box{ order:3; width:100%; }
+    .utility-spacer{ display:none; }
+  }
+
+  /* ===== top nav ===== */
+  .navbar{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:34px;
+    background:var(--white);
+    padding:22px 40px;
+    z-index:20;
+  }
+  .nav-item{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    font-size:16px;
+    color:var(--dark);
+    cursor:pointer;
+    padding-bottom:14px;
+    user-select:none;
+  }
+  .nav-item .chevron{ width:10px; height:10px; transition:transform .2s ease; }
+  .nav-item.open{ color:var(--red); }
+  .nav-item.open .chevron{ transform:rotate(180deg); }
+  .nav-item.open::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:3px;
+    background:var(--red);
+  }
+  .nav-item.no-caret{ font-weight:600; }
+  .dropdown{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width:230px;
+    background:var(--white);
+    box-shadow:0 18px 30px rgba(0,0,0,0.18);
+    padding:6px 0;
+    z-index:30;
+  }
+  .nav-item.open .dropdown{ display:block; }
+  .dropdown a{
+    display:block;
+    padding:16px 24px;
+    font-size:15px;
+    font-weight:400;
+    color:var(--dark);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .dropdown a:hover{ background:#f5f5f5; color:var(--red); }
+  .dropdown a.current{ color:var(--red); font-weight:600; }
+  .chevron path{ stroke:var(--red); stroke-width:1.6; fill:none; }
+
+  @media (max-width:700px){
+    .navbar{ flex-wrap:wrap; gap:18px; padding:18px 20px; }
+  }
+
+  /* ===== page banner ===== */
+  .banner{
+    width:100%;
+    height:clamp(220px, 34vw, 480px);
+    overflow:hidden;
+  }
+  .banner img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 40%;
+    display:block;
+  }
+
+  /* ===== page heading ===== */
+  .page-intro{
+    padding:36px 60px 50px;
+    max-width:1150px;
+  }
+  .page-intro h1{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(32px, 4vw, 52px);
+    margin:0 0 18px;
+    color:var(--dark);
+  }
+  .page-intro p{
+    font-size:17px;
+    line-height:1.5;
+    color:#333;
+    margin:0;
+  }
+
+  @media (max-width:700px){
+    .page-intro{ padding:28px 24px 40px; }
+  }
+
+  /* ===== explore + why choose section ===== */
+  .explore-wrap{ padding:0 60px; }
+  .explore-btn-top{
+    display:inline-block;
+    background:var(--red);
+    color:var(--white);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:12px 22px;
+    text-decoration:none;
+    border-radius:3px;
+  }
+
+  .why-section{ padding:50px 60px 70px; }
+  .why-section h2{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:32px;
+    margin:0 0 30px;
+    color:var(--dark);
+  }
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:24px;
+  }
+  .why-card{
+    border:1px solid #ddd;
+    border-left:4px solid #9a9a9a;
+    padding:26px 24px;
+    min-height:260px;
+  }
+  .why-card h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:30px;
+    color:#4d4d4d;
+    margin:0 0 14px;
+  }
+  .why-card .rule{
+    width:70%;
+    height:3px;
+    background:#cfcfcf;
+    margin-bottom:16px;
+  }
+  .why-card p{
+    font-size:15px;
+    font-weight:600;
+    line-height:1.5;
+    color:#3a3a3a;
+    margin:0 0 10px;
+  }
+  .why-card .source{
+    font-size:13px;
+    font-weight:400;
+    font-style:italic;
+    color:#999;
+  }
+
+  .secondary-section{
+    padding:10px 60px 60px;
+    max-width:1200px;
+  }
+  .secondary-section h2{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:28px;
+    margin:0 0 18px;
+    color:var(--dark);
+  }
+  .secondary-section p{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin:0;
+  }
+
+  @media (max-width:900px){
+    .why-grid{ grid-template-columns:repeat(2, 1fr); }
+    .explore-wrap{ padding:0 24px; }
+    .why-section{ padding:40px 24px 50px; }
+    .secondary-section{ padding:10px 24px 40px; }
+  }
+  @media (max-width:560px){
+    .why-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ===== price comparison table ===== */
+  .price-section{ padding:10px 60px 30px; max-width:1300px; }
+  .price-section h2{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:28px;
+    margin:0 0 24px;
+    color:var(--dark);
+  }
+  .price-table{
+    width:100%;
+    border-collapse:collapse;
+    border:1px solid #ddd;
+  }
+  .price-table th{
+    background:#efefef;
+    text-align:left;
+    font-weight:700;
+    font-size:15px;
+    padding:16px 20px;
+    border:1px solid #ddd;
+  }
+  .price-table th:first-child{ background:#efefef; }
+  .price-table td{
+    padding:16px 20px;
+    font-size:15px;
+    color:#222;
+    border:1px solid #ddd;
+  }
+  .price-source{
+    font-size:14px;
+    font-style:italic;
+    color:#333;
+    margin:14px 0 0;
+  }
+
+  /* ===== accordion ===== */
+  .accordion{ padding:20px 60px 0; max-width:1300px; }
+  .accordion-item{ border-bottom:1px solid #ccc; }
+  .accordion-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 0;
+    cursor:pointer;
+  }
+  .accordion-header h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:22px;
+    color:#555;
+    margin:0;
+  }
+  .accordion-header svg{
+    width:18px; height:18px;
+    transition:transform .2s ease;
+    flex-shrink:0;
+  }
+  .accordion-header svg path{ stroke:#555; stroke-width:1.8; fill:none; }
+  .accordion-item.open .accordion-header svg{ transform:rotate(180deg); }
+  .accordion-panel{
+    display:none;
+    padding:0 0 24px;
+    font-size:15px;
+    line-height:1.6;
+    color:#333;
+  }
+  .accordion-item.open .accordion-panel{ display:block; }
+
+  @media (max-width:700px){
+    .price-section{ padding:10px 24px 24px; }
+    .accordion{ padding:16px 24px 0; }
+  }
+
+  /* ===== student testimonial card ===== */
+  .testimonial-wrap{ padding:20px 60px 10px; max-width:1300px; }
+  .testimonial-card{
+    display:flex;
+    border:1px solid #ddd;
+  }
+  .testimonial-photo{
+    width:260px;
+    flex-shrink:0;
+    background-size:cover;
+    background-position:center;
+  }
+  .testimonial-body{ padding:26px 32px; }
+  .testimonial-name-row{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .testimonial-name-row h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:26px;
+    color:var(--dark);
+    margin:0;
+  }
+  .testimonial-name-row .place{
+    font-size:15px;
+    color:#777;
+    padding-left:8px;
+    border-left:1px solid #ccc;
+  }
+  .testimonial-body p.quote{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin:0 0 16px;
+  }
+  .testimonial-body p.pathway{
+    font-size:14px;
+    color:#777;
+    margin:0;
+  }
+
+  @media (max-width:700px){
+    .testimonial-wrap{ padding:16px 24px 10px; }
+    .testimonial-card{ flex-direction:column; }
+    .testimonial-photo{ width:100%; height:220px; }
+  }
+
+  /* ===== exploring video section ===== */
+  .video-section{ padding:20px 60px 50px; max-width:1300px; }
+  .video-section h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(24px, 2.6vw, 34px);
+    margin:0 0 22px;
+    color:var(--dark);
+  }
+  .video-player{
+    position:relative;
+    max-width:1062px;
+    background:#000;
+    cursor:pointer;
+  }
+  .video-player video{
+    width:100%;
+    display:block;
+  }
+  .video-caption{
+    position:absolute;
+    left:0; bottom:0;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    z-index:2;
+    pointer-events:none;
+  }
+  .video-caption.hidden{ display:none; }
+  .video-caption span{
+    background:var(--red);
+    color:var(--white);
+    font-weight:700;
+    font-size:clamp(24px, 3vw, 40px);
+    padding:14px 22px;
+    width:fit-content;
+    line-height:1.2;
+  }
+  .video-play-btn{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:76px; height:76px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.35);
+    border:3px solid var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+    transition:transform .15s ease, opacity .2s ease;
+  }
+  .video-player:hover .video-play-btn{ transform:translate(-50%,-50%) scale(1.06); }
+  .video-play-btn.hidden{ display:none; }
+  .video-play-btn svg{ width:26px; height:26px; margin-left:4px; }
+
+  @media (max-width:700px){
+    .video-section{ padding:16px 24px 40px; }
+  }
+
+  /* ===== gallery strip ===== */
+  .gallery-section{ padding:30px 60px 0; }
+  .gallery-strip{
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .gallery-strip::-webkit-scrollbar{ display:none; }
+  .gallery-thumb{
+    position:relative;
+    flex:0 0 auto;
+    width:238px;
+    height:161px;
+    border:1px solid #ddd;
+    overflow:hidden;
+    cursor:pointer;
+    background:#000;
+  }
+  .gallery-thumb img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .gallery-thumb.active{
+    border:3px solid #1a73e8;
+    box-shadow:0 0 0 1px #1a73e8;
+  }
+  .gallery-thumb .thumb-caption{
+    position:absolute;
+    left:0; bottom:0;
+    display:flex;
+    flex-direction:column;
+    pointer-events:none;
+  }
+  .gallery-thumb .thumb-caption span{
+    background:var(--red);
+    color:var(--white);
+    font-weight:700;
+    font-size:13px;
+    padding:4px 8px;
+    width:fit-content;
+    white-space:nowrap;
+  }
+  .gallery-thumb .thumb-play{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:52px; height:52px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.35);
+    border:2.5px solid var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+  }
+  .gallery-thumb .thumb-play svg{ width:18px; height:18px; margin-left:3px; }
+
+  .gallery-controls{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 0 34px;
+  }
+  .gallery-dots{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0 auto;
+  }
+  .gallery-dots .dot{
+    width:9px; height:9px;
+    border-radius:50%;
+    background:#ccc;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .gallery-dots .dot.active{
+    width:26px;
+    border-radius:5px;
+    background:#1a73e8;
+  }
+  .gallery-arrows{
+    display:flex;
+    gap:10px;
+    flex-shrink:0;
+  }
+  .gallery-arrows button{
+    width:34px; height:34px;
+    border-radius:50%;
+    background:#1a73e8;
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .gallery-arrows button svg{ width:14px; height:14px; }
+  .gallery-arrows button svg path{ stroke:var(--white); stroke-width:2.2; fill:none; }
+
+  @media (max-width:700px){
+    .gallery-section{ padding:24px 24px 0; }
+    .gallery-controls{ padding:16px 0 26px; }
+  }
+
+  /* ===== map section ===== */
+  .map-section{
+    position:relative;
+    width:100%;
+    height:clamp(340px, 55vw, 620px);
+    overflow:hidden;
+    background:#c9e4f0;
+  }
+  .map-section iframe{
+    width:100%; height:100%;
+    border:none;
+    display:block;
+  }
+  .map-pin{
+    position:absolute;
+    transform:translate(-50%,-100%);
+    z-index:2;
+  }
+  .map-pin.red svg{ width:30px; height:40px; }
+  .map-pin.flag svg{ width:34px; height:34px; transform:translateY(6px); }
+  .map-fullscreen-btn{
+    position:absolute;
+    top:18px; right:18px;
+    width:42px; height:42px;
+    background:var(--white);
+    border:none;
+    box-shadow:0 2px 6px rgba(0,0,0,0.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:3;
+  }
+  .map-fullscreen-btn svg{ width:18px; height:18px; }
+  .map-fullscreen-btn svg path{ stroke:#333; stroke-width:2; fill:none; }
+  .map-locate-btn{
+    position:absolute;
+    bottom:18px; right:18px;
+    width:42px; height:42px;
+    border-radius:50%;
+    background:var(--white);
+    border:none;
+    box-shadow:0 2px 6px rgba(0,0,0,0.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:3;
+  }
+  .map-locate-btn svg{ width:18px; height:18px; }
+  .map-locate-btn svg path{ stroke:#333; stroke-width:2; fill:none; }
+
+  /* ===== CTA banner ===== */
+  .cta-section{ padding:50px 60px 40px; }
+  .cta-box{
+    border:1.5px solid var(--red);
+    padding:44px 40px;
+    text-align:center;
+  }
+  .cta-box h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(24px, 2.6vw, 34px);
+    color:var(--red);
+    margin:0 0 26px;
+  }
+  .cta-box .cta-btn{
+    display:inline-block;
+    background:var(--red);
+    color:var(--white);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:13px 26px;
+    text-decoration:none;
+    border-radius:3px;
+  }
+
+  .photo-credit{
+    padding:0 60px 40px;
+  }
+  .photo-credit hr{
+    border:none;
+    border-top:1px solid #ddd;
+    margin:0 0 22px;
+  }
+  .photo-credit p{
+    margin:0;
+    font-size:14px;
+    color:#333;
+  }
+
+  @media (max-width:700px){
+    .cta-section{ padding:36px 24px 30px; }
+    .cta-box{ padding:32px 24px; }
+    .photo-credit{ padding:0 24px 30px; }
+  }
+
+  /* ===== footer ===== */
+  .site-footer{
+    background:#1a1a1a;
+    color:var(--white);
+    padding:36px 60px 30px;
+  }
+  .footer-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:34px;
+  }
+  .footer-partner{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .footer-partner span{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.5px;
+  }
+  .footer-into-logo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .footer-into-logo .into-text{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:26px;
+    letter-spacing:.5px;
+    color:var(--white);
+  }
+  .footer-into-logo svg{ width:26px; height:26px; }
+  .footer-social{ display:flex; gap:12px; }
+  .footer-social a{
+    width:38px; height:38px;
+    border-radius:50%;
+    background:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .footer-social a svg{ width:18px; height:18px; }
+  .footer-social a svg path{ fill:#1a1a1a; }
+
+  .footer-legal p{
+    font-size:14px;
+    line-height:1.7;
+    margin:0 0 20px;
+    max-width:1500px;
+  }
+  .footer-legal p b{ font-weight:700; }
+  .footer-copyright{
+    font-size:13px;
+    padding-top:14px;
+  }
+  .footer-copyright a{
+    color:var(--white);
+    text-decoration:underline;
+  }
+
+  @media (max-width:900px){
+    .site-footer{ padding:28px 24px 24px; }
+    .footer-top{ flex-wrap:wrap; gap:20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="utility-bar">
+  <div class="utility-logo">
+    <img src="./Screenshot 2026-07-17 145528.png" alt="International Study Centre | Lancaster University">
+  </div>
+
+  <div class="search-box">
+    <input type="text" placeholder="Search programmes">
+    <button aria-label="Search">
+      <svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="6.5" fill="none" stroke-width="2"/><line x1="14" y1="14" x2="19" y2="19" stroke-width="2"/></svg>
+    </button>
+  </div>
+
+  <div class="utility-spacer"></div>
+
+  <div class="right-controls">
+    <a href="#" class="apply-btn">Apply</a>
+    <div class="lang-select">
+      <svg class="globe" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke-width="1.5"/><path d="M2 10h16M10 2c2.5 2.5 2.5 13 0 16M10 2c-2.5 2.5-2.5 13 0 16" stroke-width="1.5"/></svg>
+      <span>En</span>
+      <svg class="chev" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-item" data-menu="about">
+    About
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsitabout.html">Student success</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="study">
+    Study
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitourwebsiteug.html">Undergraduate</a>
+      <a href="./visitwebsitepg.html">Postgraduate</a>
+      <a href="./visitwebsiteenglish.html">English Language</a>
+      <a href="./visitwebsiteteacher.html">Your teachers</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="student-life">
+    Student life
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsiteliving.html" class="current">Living</a>
+      <a href="./visitwebsiteaccomadation.html">Accommodation</a>
+      <a href="./visitwebsiteemployabily.html">Employability</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="support">
+    Support
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsitetution.html">Tuition and scholarships</a>
+      <a href="./visitwebsitearrival.html">Pre-arrival</a>
+      <a href="./visitwebsiteapply.html">How to apply</a>
+      <a href="./visitwebsitevisa.html">Visa</a>
+    </div>
+  </div>
+
+  <div class="nav-item no-caret" data-menu="">
+    <a href="./visitcontact.html">Contact</a>
+  </div>
+</nav>
+
+<div class="banner">
+  <img src="./Screenshot 2026-07-17 151347.png" alt="Two students walking in Lancaster city centre">
+</div>
+
+<div class="page-intro">
+  <h1>Living in Lancaster as a student</h1>
+  <p>Experience the perfect mix of city and country life in Lancaster, where there are endless things to see and do. Learn about the area's exciting history, explore the city centre and visit the local markets. Plus, the beautiful English countryside is right on your doorstep, with the beach, ancient woodlands and Lake District National Park all within easy reach.</p>
+</div>
+
+<div class="explore-wrap">
+  <a href="#" class="explore-btn-top">Explore Lancaster</a>
+</div>
+
+<div class="why-section">
+  <h2>Why international students choose Lancaster</h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <h3>Vibrant</h3>
+      <div class="rule"></div>
+      <p>From festivals to cultural celebrations, there's always something happening.</p>
+    </div>
+    <div class="why-card">
+      <h3>Affordable</h3>
+      <div class="rule"></div>
+      <p>39% lower cost of living (including rent) than London</p>
+      <span class="source">(Numbeo.com 2026)</span>
+    </div>
+    <div class="why-card">
+      <h3>Welcoming</h3>
+      <div class="rule"></div>
+      <p>Compact, safe and surrounded by a tight-knit community.</p>
+    </div>
+    <div class="why-card">
+      <h3>Beautiful</h3>
+      <div class="rule"></div>
+      <p>A charming city with the stunning Lake District countryside on its doorstep.</p>
+    </div>
+  </div>
+</div>
+
+<div class="secondary-section">
+  <h2>An affordable city with historic charm and a modern outlook</h2>
+  <p>Lancaster is one of the UK's top 5 most affordable university cities (Finder.com 2025), so you can enjoy student life while keeping your costs down.</p>
+</div>
+
+<div class="price-section">
+  <h2>Average prices in Lancaster vs London</h2>
+  <table class="price-table">
+    <thead>
+      <tr><th></th><th>Lancaster</th><th>London</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Coffee (cappuccino)</td><td>£3.24</td><td>£3.90</td></tr>
+      <tr><td>Cinema ticket</td><td>£6</td><td>£15</td></tr>
+      <tr><td>Meal out (inexpensive)</td><td>£16.50</td><td>£20</td></tr>
+      <tr><td>Gym membership (monthly)</td><td>£44.50</td><td>£57</td></tr>
+      <tr><td>Travel (student monthly pass)</td><td>£50</td><td>From £89.90 (Tube)</td></tr>
+    </tbody>
+  </table>
+  <p class="price-source">(Sources include Numbeo.com 2026)</p>
+</div>
+
+<div class="accordion">
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>How to save money while you study</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel">
+      <p>Content coming soon.</p>
+    </div>
+  </div>
+</div>
+
+<div class="testimonial-wrap">
+  <div class="testimonial-card">
+    <div class="testimonial-photo" style="background-image:url('./LAN-card-image-testimonial-Safa.avif')"></div>
+    <div class="testimonial-body">
+      <div class="testimonial-name-row">
+        <h3>Safa</h3>
+        <span class="place">Nigeria</span>
+      </div>
+      <p class="quote">"I chose Lancaster because it's peaceful and affordable compared to other universities. It's not a big, noisy city, which I really like, and the cost of living here is much lower than at other top universities. That was a big factor for me."</p>
+      <p class="pathway">Pathway: International Foundation</p>
+    </div>
+  </div>
+</div>
+
+<div class="secondary-section">
+  <h2>Explore everything Lancaster has to offer</h2>
+</div>
+
+<div class="accordion">
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>Career opportunities across multiple job markets</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>Activities, culture and entertainment</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>Easy travel around Lancaster and across the UK</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>International and local food to explore</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>Sports and outdoor adventures</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+</div>
+
+<div class="video-section">
+  <h2>Exploring Lancaster and beyond</h2>
+  <div class="video-player" id="exploreVideoWrap" onclick="playExploreVideo()">
+    <video id="exploreVideo" poster="./explore_poster.png" playsinline>
+      <source src="./2025_Video_LAN_Location_16X9_EN_Sub.mp4" type="video/mp4">
+    </video>
+    <div class="video-play-btn" id="explorePlayBtn">
+      <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="#ffffff"/></svg>
+    </div>
+    <div class="video-caption" id="exploreCaption">
+      <span>Living and learning</span>
+      <span>in Lancaster</span>
+    </div>
+  </div>
+</div>
+
+<div class="gallery-section">
+  <div class="gallery-strip" id="galleryStrip">
+    <div class="gallery-thumb" data-index="0">
+      <img src="./gallery-LAN-manchester.avif" alt="Tram in a Liverpool city street">
+    </div>
+    <div class="gallery-thumb" data-index="1">
+      <img src="./gallery-LAN-liverpool.avif" alt="Museum of Liverpool on the waterfront">
+    </div>
+    <div class="gallery-thumb active" data-index="2" onclick="playGalleryVideo()">
+      <img src="./2025_Thumbnail_LAN_Location_16x9_EN_Title.avif" alt="Students walking through Lancaster Castle courtyard">
+      <div class="thumb-play">
+        <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="#ffffff"/></svg>
+      </div>
+      <div class="thumb-caption">
+        <span>Living and learning</span>
+        <span>in Lancaster</span>
+      </div>
+    </div>
+    <div class="gallery-thumb" data-index="3">
+      <img src="./gallery-LAN-lake-distric.avif" alt="Sunrise over a Lake District valley and lake">
+    </div>
+    <div class="gallery-thumb" data-index="4">
+      <img src="./gallery-LAN-lake-windermere.avif" alt="Lakeside house with snow-capped fells behind">
+    </div>
+  </div>
+
+  <div class="gallery-controls">
+    <div class="gallery-dots" id="galleryDots">
+      <div class="dot active" data-dot="0"></div>
+      <div class="dot" data-dot="1"></div>
+      <div class="dot" data-dot="2"></div>
+      <div class="dot" data-dot="3"></div>
+      <div class="dot" data-dot="4"></div>
+      <div class="dot" data-dot="5"></div>
+      <div class="dot" data-dot="6"></div>
+      <div class="dot" data-dot="7"></div>
+      <div class="dot" data-dot="8"></div>
+      <div class="dot" data-dot="9"></div>
+    </div>
+    <div class="gallery-arrows">
+      <button aria-label="Previous" onclick="scrollGallery(-1)">
+        <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button aria-label="Next" onclick="scrollGallery(1)">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="map-section" id="mapSection">
+  <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-6.5%2C52.9%2C0.3%2C55.2&amp;layer=mapnik" loading="lazy" title="Map of Lancaster and surrounding North West England"></iframe>
+
+  <div class="map-pin flag" style="left:46%; top:32%;">
+    <svg viewBox="0 0 24 24"><path d="M12 0C7.5 0 4 3.5 4 8c0 6 8 16 8 16s8-10 8-16c0-4.5-3.5-8-8-8z" fill="#7b2d8e"/><path d="M9 6h5l-1.2 2L14 10H9z" fill="#fff"/></svg>
+  </div>
+  <div class="map-pin flag" style="left:56%; top:39%;">
+    <svg viewBox="0 0 24 24"><path d="M12 0C7.5 0 4 3.5 4 8c0 6 8 16 8 16s8-10 8-16c0-4.5-3.5-8-8-8z" fill="#7b2d8e"/><path d="M9 6h5l-1.2 2L14 10H9z" fill="#fff"/></svg>
+  </div>
+  <div class="map-pin red" style="left:47.5%; top:51%;">
+    <svg viewBox="0 0 24 24"><path d="M12 0C7.5 0 4 3.5 4 8c0 6 8 16 8 16s8-10 8-16c0-4.5-3.5-8-8-8z" fill="#e02020"/><circle cx="12" cy="8" r="3" fill="#fff"/></svg>
+  </div>
+  <div class="map-pin red" style="left:45%; top:78%;">
+    <svg viewBox="0 0 24 24"><path d="M12 0C7.5 0 4 3.5 4 8c0 6 8 16 8 16s8-10 8-16c0-4.5-3.5-8-8-8z" fill="#e02020"/><circle cx="12" cy="8" r="3" fill="#fff"/></svg>
+  </div>
+  <div class="map-pin red" style="left:54%; top:76%;">
+    <svg viewBox="0 0 24 24"><path d="M12 0C7.5 0 4 3.5 4 8c0 6 8 16 8 16s8-10 8-16c0-4.5-3.5-8-8-8z" fill="#e02020"/><circle cx="12" cy="8" r="3" fill="#fff"/></svg>
+  </div>
+
+  <button class="map-fullscreen-btn" aria-label="Fullscreen map" onclick="toggleMapFullscreen()">
+    <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <button class="map-locate-btn" aria-label="Reset map view">
+    <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M12 8a4 4 0 100 8 4 4 0 000-8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<div class="cta-section">
+  <div class="cta-box">
+    <h2>Want to experience student life in Lancaster?</h2>
+    <a href="#" class="cta-btn">Explore study options</a>
+  </div>
+</div>
+
+<div class="photo-credit">
+  <hr>
+  <p>'Highest Point Music Festival' photograph source: Ryan Yates</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-partner">
+      <span>IN PARTNERSHIP WITH</span>
+      <div class="footer-into-logo">
+        <span class="into-text">INTO</span>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="none" stroke="#fff" stroke-width="1.5"/><path d="M8 7l4 5-4 5M13 7l4 5-4 5" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/lancasteruniversityisc/?locale=en_GB" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 38.49 67.56"><path d="M8.71,39.5v28.07h15.31v-28.07h11.42l2.37-12.91h-13.79v-4.57c0-6.82,2.68-9.43,9.6-9.43,2.15,0,3.88.05,4.88.16V1.05c-1.89-.52-6.51-1.05-9.17-1.05C15.21,0,8.71,6.67,8.71,21.04v5.55H0v12.91h8.71Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/lancasteruni_isc/" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 68.71 68.69"><path d="M61.14,54.6c-1.19,3-3.51,5.32-6.53,6.53-4.52,1.8-15.25,1.38-20.25,1.38s-15.74.4-20.25-1.38c-3-1.19-5.32-3.51-6.53-6.53-1.8-4.52-1.38-15.25-1.38-20.25s-.4-15.74,1.38-20.25c1.19-3,3.51-5.32,6.53-6.53,4.52-1.8,15.25-1.38,20.25-1.38s15.74-.4,20.25,1.38c3,1.19,5.32,3.51,6.53,6.53,1.8,4.52,1.38,15.25,1.38,20.25s.41,15.74-1.38,20.25M68.47,20.18c-.26-5.5-1.52-10.38-5.55-14.39C58.9,1.78,54.03.52,48.53.24,42.86-.08,25.85-.08,20.18.24c-5.49.26-10.36,1.52-14.39,5.53C1.76,9.79.52,14.67.24,20.17-.08,25.84-.08,42.84.24,48.51c.26,5.5,1.52,10.38,5.55,14.39,4.03,4.02,8.89,5.27,14.39,5.55,5.67.32,22.67.32,28.34,0,5.5-.26,10.38-1.52,14.39-5.55,4.02-4.02,5.27-8.89,5.55-14.39.32-5.67.32-22.65,0-28.32M56.8,16.01c0,2.29-1.84,4.11-4.11,4.11s-4.11-1.84-4.11-4.11,1.84-4.11,4.11-4.11,4.11,1.84,4.11,4.11M34.36,45.8c-6.3,0-11.45-5.14-11.45-11.45s5.14-11.45,11.45-11.45,11.45,5.14,11.45,11.45-5.15,11.45-11.45,11.45M34.36,16.73c-9.75,0-17.61,7.87-17.61,17.61s7.87,17.61,17.61,17.61,17.61-7.86,17.61-17.61-7.87-17.61-17.61-17.61"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <p><b>INTO Lancaster Limited</b>, trading as Lancaster University International Study Centre, is a limited liability partnership registered in England and Wales, registered number 14819227</p>
+    <p><b>Registered Office:</b> One Gloucester Place, Brighton, East Sussex, BN1 4AA, UK</p>
+    <p><b>VAT registration number:</b> 123 4160 57</p>
+    <p><b>Education provider sponsor number 6FY6FQBV1</b>, INTO Lancaster Limited is a teaching site on the Sponsor Licence of INTO Manchester Limited</p>
+  </div>
+
+  <div class="footer-copyright">
+    © Copyright 2026 | INTO UNIVERSITY PARTNERSHIPS LTD AND IUP 2 LLP <a href="#">沪ICP备14028023号-3</a> | <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Cookies Policy</a> | <a href="#">Governance</a> | <a href="#">Accessibility</a> | <a href="#">Modern Slavery</a>
+  </div>
+</footer>
+
+<script>
+  const items = document.querySelectorAll('.nav-item[data-menu]');
+  items.forEach(item => {
+    const menuName = item.getAttribute('data-menu');
+    if(!menuName) return;
+    item.addEventListener('click', (e) => {
+      const isOpen = item.classList.contains('open');
+      items.forEach(i => i.classList.remove('open'));
+      if(!isOpen){ item.classList.add('open'); }
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click', () => {
+    items.forEach(i => i.classList.remove('open'));
+  });
+
+  document.querySelectorAll('[data-acc]').forEach(acc => {
+    acc.querySelector('.accordion-header').addEventListener('click', () => {
+      acc.classList.toggle('open');
+    });
+  });
+
+  function playExploreVideo(){
+    const video = document.getElementById('exploreVideo');
+    const playBtn = document.getElementById('explorePlayBtn');
+    const caption = document.getElementById('exploreCaption');
+    if(!video) return;
+    video.setAttribute('controls', '');
+    playBtn.classList.add('hidden');
+    caption.classList.add('hidden');
+    video.play().catch(() => {
+      /* No video file loaded yet — replace the src in the <source> tag
+         (./exploring-lancaster.mp4) with your actual video file to enable playback. */
+    });
+  }
+
+  function playGalleryVideo(){
+    document.querySelector('.video-section')?.scrollIntoView({behavior:'smooth'});
+    playExploreVideo();
+  }
+
+  const galleryStrip = document.getElementById('galleryStrip');
+  const galleryDots = document.querySelectorAll('#galleryDots .dot');
+  const galleryThumbs = document.querySelectorAll('.gallery-thumb');
+
+  function scrollGallery(direction){
+    galleryStrip.scrollBy({ left: direction * 254, behavior: 'smooth' });
+  }
+
+  galleryThumbs.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      galleryThumbs.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      const idx = parseInt(thumb.getAttribute('data-index'), 10);
+      galleryDots.forEach(d => d.classList.remove('active'));
+      if(galleryDots[idx]) galleryDots[idx].classList.add('active');
+    });
+  });
+
+  galleryDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      galleryDots.forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+    });
+  });
+
+  function toggleMapFullscreen(){
+    const mapEl = document.getElementById('mapSection');
+    if(!document.fullscreenElement){
+      mapEl.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }
+</script>
+</body>
+</html>

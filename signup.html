@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INTO &mdash; Igniting global careers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #141414;
+    --red: #E31937;
+    --red-deep: #B4102A;
+    --yellow: #FBBB16;
+    --cyan: #4FD5E8;
+    --teal: #0B5D58;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    background: #fff;
+  }
+
+  a { text-decoration: none; }
+
+  /* ===== Top dark bar ===== */
+  .into-topbar {
+    background: var(--dark);
+    padding: 0 48px;
+  }
+
+  .into-topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+
+  .into-logo-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .into-logo-link .into-text {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -0.5px;
+    color: var(--white);
+  }
+
+  .into-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .into-apply-btn {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 24px;
+    border: 1.5px solid var(--white);
+    border-radius: 999px;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .into-apply-btn:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .into-lang {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--white);
+  }
+
+  .into-lang svg.globe { width: 21px; height: 21px; stroke: var(--white); flex-shrink: 0; }
+  .into-lang svg.chev { width: 12px; height: 12px; stroke: var(--white); flex-shrink: 0; }
+  .into-lang .lang-code {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cyan);
+  }
+
+  /* ===== Red nav bar ===== */
+  .into-nav {
+    background: var(--red);
+    padding: 0 48px;
+  }
+
+  .into-nav-list {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 56px;
+  }
+
+  .into-nav-list a {
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 500;
+    opacity: 0.96;
+  }
+
+  .into-nav-list a:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  /* ===== Hero ===== */
+  .into-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(115deg, var(--red-deep) 0%, var(--red) 45%, #E8355A 100%);
+    min-height: 560px;
+  }
+
+  .chevron-shape {
+    position: absolute;
+    clip-path: polygon(0% 0%, 55% 0%, 100% 50%, 55% 100%, 0% 100%, 38% 50%);
+  }
+
+  .chevron-shape.c1 {
+    width: 480px;
+    height: 620px;
+    top: -60px;
+    right: 260px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .chevron-shape.c2 {
+    width: 420px;
+    height: 540px;
+    top: 40px;
+    right: 60px;
+    background: rgba(0,0,0,0.10);
+  }
+
+  .chevron-shape.c3 {
+    width: 340px;
+    height: 440px;
+    top: 110px;
+    right: -60px;
+    background: rgba(255,60,110,0.28);
+  }
+
+  .into-hero-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    min-height: 560px;
+  }
+
+  .into-hero-text {
+    padding: 56px 0 64px 48px;
+    max-width: 620px;
+  }
+
+  .into-hero-text h1 {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 46px;
+    line-height: 1.15;
+    color: var(--white);
+    margin: 0 0 8px;
+  }
+
+  .into-hero-text .subhead {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--white);
+    margin: 0 0 32px;
+  }
+
+  .hero-search {
+    display: flex;
+    align-items: center;
+    background: var(--white);
+    border-radius: 999px;
+    padding: 6px;
+    max-width: 620px;
+    box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+  }
+
+  .hero-search .search-icon {
+    display: flex;
+    align-items: center;
+    padding: 0 8px 0 18px;
+    color: var(--dark);
+    flex-shrink: 0;
+  }
+
+  .hero-search .search-icon svg { width: 20px; height: 20px; }
+
+  .hero-search input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--dark);
+    padding: 15px 8px;
+    background: transparent;
+  }
+
+  .hero-search input::placeholder {
+    color: #8c8c8c;
+  }
+
+  .find-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--yellow);
+    color: var(--dark);
+    border: none;
+    border-radius: 999px;
+    padding: 15px 22px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .find-btn:hover { background: #f0ad0a; }
+  .find-btn svg { width: 16px; height: 16px; }
+
+  .into-hero-photo {
+    position: relative;
+    z-index: 2;
+    height: 560px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .into-hero-photo img {
+    height: 100%;
+    width: auto;
+    max-width: 480px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  @media (max-width: 980px) {
+    .into-hero-inner { flex-direction: column-reverse; align-items: center; }
+    .into-hero-photo { height: 320px; margin-top: 24px; }
+    .into-hero-text { padding: 40px 24px 32px; }
+    .into-topbar, .into-nav { padding: 0 20px; }
+    .into-nav-list { flex-wrap: wrap; height: auto; padding: 14px 0; gap: 18px 28px; }
+  }
+
+  @media (max-width: 600px) {
+    .into-hero-text h1 { font-size: 32px; }
+    .into-hero-text .subhead { font-size: 18px; }
+    .hero-search { flex-wrap: wrap; border-radius: 20px; }
+    .find-btn { width: 100%; justify-content: center; margin-top: 6px; }
+  }
+
+  /* ===== Destination cards ===== */
+  .cards-section {
+    padding: 48px;
+    background: #fff;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .dest-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dest-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .dest-caption {
+    background: var(--teal);
+    color: #fff;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .dest-caption p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .dest-arrow {
+    width: 48px;
+    height: 48px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .dest-arrow svg { width: 20px; height: 20px; }
+
+  /* ===== University filter band ===== */
+  .filter-band {
+    background: #f0f0ef;
+    padding: 56px 48px;
+  }
+
+  .filter-card {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: 20px;
+    color: var(--dark);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    border: 1px solid #c9c9c9;
+    border-radius: 4px;
+    background: #fff;
+    padding: 13px 16px;
+    cursor: pointer;
+  }
+
+  .filter-select.country { width: 150px; }
+  .filter-select.university { width: 360px; }
+
+  .filter-select .fs-label {
+    font-size: 15px;
+    color: var(--dark);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .filter-select .fs-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .filter-select .flag { font-size: 18px; line-height: 1; }
+  .filter-select svg.chev { width: 13px; height: 13px; flex-shrink: 0; color: var(--dark); }
+
+  .btn-view {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 14px 32px;
+    font-weight: 700;
+    font-size: 15px;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn-view:hover { background: #084842; }
+
+  @media (max-width: 980px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .filter-card { justify-content: flex-start; }
+    .filter-select.university { width: 100%; }
+    .filter-controls { width: 100%; }
+  }
+
+  /* ===== Footer ===== */
+  .into-footer {
+    background: var(--red);
+    padding: 40px 48px 36px;
+  }
+
+  .footer-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 34px;
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 12px;
+  }
+
+  .footer-social a {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  .footer-social svg { width: 100%; height: 100%; }
+
+  .footer-nav ul {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+    margin: 0 0 32px;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .footer-nav a {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .footer-nav a:hover { text-decoration: underline; }
+
+  .footer-text p {
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 20px;
+    max-width: 1500px;
+  }
+
+  .footer-text a { color: #fff; text-decoration: underline; }
+
+  .footer-copyright { margin-top: 20px; }
+
+  .footer-copyright p {
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .footer-copyright a { color: #fff; text-decoration: underline; }
+
+  .badge-icon {
+    display: inline-flex;
+    vertical-align: middle;
+    width: 17px;
+    height: 17px;
+    margin: 0 1px;
+  }
+
+  @media (max-width: 720px) {
+    .into-footer { padding: 32px 20px; }
+    .footer-nav ul { gap: 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="into-topbar">
+    <div class="into-topbar-inner">
+      <a class="into-logo-link" href="#">
+        <span class="into-text">INTO</span>
+        <svg viewBox="0 0 44 44" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="22" r="20.5" stroke="#fff" stroke-width="2.4"/>
+          <path d="M15 13l9 9-9 9" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M23 13l9 9-9 9" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+
+      <div class="into-topbar-right">
+        <a class="into-apply-btn" href="#">Apply</a>
+        <button class="into-lang" type="button">
+          <svg class="globe" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z" stroke="currentColor" stroke-width="1.6"/></svg>
+          <span class="lang-code">En</span>
+          <svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="into-nav">
+    <ul class="into-nav-list">
+      <li><a href="#">About INTO</a></li>
+      <li><a href="#">Study abroad</a></li>
+      <li><a href="#">Study programs</a></li>
+      <li><a href="#">Where to study</a></li>
+      <li><a href="#">Admissions</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="into-hero">
+    <span class="chevron-shape c1"></span>
+    <span class="chevron-shape c2"></span>
+    <span class="chevron-shape c3"></span>
+
+    <div class="into-hero-inner">
+      <div class="into-hero-text">
+        <h1>Igniting global careers</h1>
+        <p class="subhead">Find the best study option for you</p>
+
+        <form class="hero-search">
+          <span class="search-icon">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2.2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          </span>
+          <input type="text" placeholder="e.g. Business Studies and Finance" aria-label="Search programs">
+          <button class="find-btn" type="submit">
+            FIND PROGRAMS
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </form>
+      </div>
+
+      <div class="into-hero-photo">
+        <img src="./Screenshot 2026-07-17 171706.png" alt="Student looking up">
+      </div>
+    </div>
+  </section>
+</header>
+
+<section class="cards-section">
+  <div class="cards-grid">
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1762111359333-4bcaff0678ae?fm=jpg&q=80&w=900&auto=format&fit=crop" alt="London skyline with the Shard, UK">
+      <div class="dest-caption">
+        <p>Browse our university partners and Choice centers at top study destinations across the UK.</p>
+        <span class="dest-arrow">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1717857426568-f1fbf565fbf9?fm=jpg&q=80&w=900&auto=format&fit=crop" alt="Person walking across Brooklyn Bridge, New York">
+      <div class="dest-caption">
+        <p>Explore our university partners in North America &ndash; the number one choice for international students.</p>
+        <span class="dest-arrow">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1758275557348-23950a3ddeae?fm=jpg&q=80&w=900&auto=format&fit=crop" alt="Three friends talking outdoors near water">
+      <div class="dest-caption">
+        <p>Discover our university partner in Australia, where 25% of students are international.</p>
+        <span class="dest-arrow">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="filter-band">
+  <div class="filter-card">
+    <span class="filter-label">Explore our universities</span>
+    <div class="filter-controls">
+      <div class="filter-select country">
+        <span class="fs-label">UK</span>
+        <span class="fs-meta">
+          <span class="flag">&#127468;&#127463;</span>
+          <svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+      <div class="filter-select university">
+        <span class="fs-label">City St George&rsquo;s, University of London Intern&hellip;</span>
+        <svg class="chev" viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <button class="btn-view" type="button">View</button>
+    </div>
+  </div>
+</section>
+
+<footer class="into-footer">
+  <div class="footer-top-row">
+    <a class="into-logo-link" href="#">
+      <span class="into-text">INTO</span>
+      <svg viewBox="0 0 44 44" width="30" height="30" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="22" cy="22" r="20.5" stroke="#fff" stroke-width="2.4"/>
+        <path d="M15 13l9 9-9 9" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M23 13l9 9-9 9" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+
+    <div class="footer-social">
+      <a href="#" aria-label="Facebook">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="8" fill="#fff"/>
+          <path d="M23 13.5h2.6V9.7c-.45-.06-2-.2-3.8-.2-3.76 0-6.33 2.36-6.33 6.7v3.32H11.4v4.24h4.07V30.5h4.26V23.76h3.9l.62-4.24h-4.52v-2.9c0-1.23.34-2.12 2.27-2.12z" fill="#141414"/>
+        </svg>
+      </a>
+      <a href="#" aria-label="Instagram">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="8" fill="#fff"/>
+          <rect x="9" y="9" width="22" height="22" rx="6" stroke="#141414" stroke-width="2.4" fill="none"/>
+          <circle cx="20" cy="20" r="5.6" stroke="#141414" stroke-width="2.4" fill="none"/>
+          <circle cx="26.5" cy="13.5" r="1.5" fill="#141414"/>
+        </svg>
+      </a>
+      <a href="#" aria-label="Twitter">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="8" fill="#fff"/>
+          <path transform="translate(7,9) scale(0.68)" d="M28.671,6.965c0.008,0.198,0.011,0.397,0.011,0.596c0,6.093-4.581,13.12-12.961,13.12 c-2.572,0-4.968-0.771-6.985-2.087c0.357,0.043,0.72,0.064,1.088,0.064c2.134,0,4.1-0.741,5.657-1.983 c-1.994-0.038-3.677-1.397-4.257-3.264c0.278,0.054,0.563,0.083,0.856,0.083c0.415,0,0.817-0.056,1.198-0.16 c-2.083-0.43-3.65-2.302-3.65-4.552c0-0.02,0-0.039,0-0.058c0.614,0.352,1.316,0.564,2.062,0.588 C10.5,8.643,9.68,7.155,9.68,5.472c0-0.89,0.232-1.724,0.638-2.443c2.244,2.827,5.599,4.685,9.383,4.881 c-0.078-0.344-0.117-0.702-0.117-1.07c0-2.598,2.05-4.706,4.581-4.706c1.317,0,2.507,0.57,3.342,1.482 c1.043-0.212,2.023-0.605,2.908-1.146c-0.342,1.11-1.068,2.041-2.012,2.629c0.925-0.112,1.807-0.364,2.626-0.735 C30.36,5.485,29.578,6.31,28.671,6.965z" fill="#141414"/>
+        </svg>
+      </a>
+      <a href="#" aria-label="LinkedIn">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <rect width="40" height="40" rx="8" fill="#fff"/>
+          <text x="20" y="26.5" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="16" fill="#141414" text-anchor="middle">in</text>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <nav class="footer-nav">
+    <ul>
+      <li><a href="#">About INTO</a></li>
+      <li><a href="#">Study abroad</a></li>
+      <li><a href="#">Study programs</a></li>
+      <li><a href="#">Where to study</a></li>
+      <li><a href="#">Admissions</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="footer-text">
+    <p>Students: if you&rsquo;re using an education counsellor please contact them with any questions. All other students, <a href="#">please contact us</a> using our online form and we&rsquo;ll be happy to help on your study abroad journey.</p>
+    <p>Education counsellors: please contact your local INTO Regional Office.</p>
+  </div>
+
+  <div class="footer-copyright">
+    <p>
+      &copy; Copyright 2026 | INTO UNIVERSITY PARTNERSHIPS LTD AND IUP 2 LLP
+      <a href="#">&#27818;ICP&#22791;14028023&#21495;-3</a> |
+      <span class="badge-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#fff"/><circle cx="12" cy="12" r="8.4" fill="none" stroke="#141414" stroke-width="1.3"/><circle cx="12" cy="12" r="3" fill="#141414"/></svg>
+      </span>
+      <a href="#">&#27818;&#20844;&#32593;&#23433;&#22791;31010502007241&#21495;</a> |
+      <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Cookies Policy</a> | <a href="#">Governance</a> | <a href="#">Accessibility</a> | <a href="#">Modern Slavery</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

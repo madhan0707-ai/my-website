@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lancaster University International Study Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#b5121b;
+    --ink:#1c1c1c;
+    --grey:#4a4a4a;
+    --border:#dcdcdc;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:'Poppins', Arial, sans-serif;
+    color:var(--ink);
+    background:#fff;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    padding:18px 40px;
+    border-bottom:1px solid var(--border);
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-shrink:0;
+  }
+  .logo .isc-name{
+    font-size:13px;
+    line-height:1.25;
+    color:#555;
+  }
+  .logo .divider{
+    width:1px;
+    height:34px;
+    background:#ccc;
+  }
+  .logo .lu-name{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:600;
+    font-size:20px;
+    line-height:1.1;
+    color:var(--ink);
+  }
+  .logo .shield{
+    width:34px;
+    height:34px;
+    flex-shrink:0;
+  }
+
+  .search-wrap{
+    flex:1;
+    max-width:420px;
+    display:flex;
+    border:1px solid #ccc;
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .search-wrap input{
+    border:none;
+    outline:none;
+    padding:11px 16px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    flex:1;
+    color:#333;
+  }
+  .search-wrap button{
+    background:var(--red);
+    border:none;
+    width:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .search-wrap button svg{ width:16px; height:16px; stroke:#fff; }
+
+  .topbar-right{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-shrink:0;
+  }
+  .apply-btn{
+    border:1.5px solid var(--ink);
+    border-radius:4px;
+    padding:9px 20px;
+    font-weight:600;
+    font-size:15px;
+    background:#fff;
+    color:var(--ink);
+    cursor:pointer;
+    font-family:'Poppins', Arial, sans-serif;
+  }
+  .lang-select{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:500;
+    font-size:15px;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .lang-select svg{ width:18px; height:18px; }
+
+  /* ===== Nav row ===== */
+  .navrow{
+    display:flex;
+    align-items:center;
+    gap:36px;
+    padding:16px 40px;
+    border-bottom:1px solid var(--border);
+    position:relative;
+    z-index:30;
+  }
+  .nav-item{
+    position:relative;
+  }
+  .nav-label{
+    background:none;
+    border:none;
+    padding:0;
+    text-decoration:none;
+    color:var(--ink);
+    font-weight:500;
+    font-size:16px;
+    font-family:'Poppins', Arial, sans-serif;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+  }
+  .nav-item.plain .nav-label{ cursor:default; }
+  .nav-label svg{ width:11px; height:11px; flex-shrink:0; transition:transform .15s ease; }
+  .nav-label svg path{ stroke:#666; transition:stroke .15s ease; }
+
+  .nav-item.open{ padding-bottom:16px; margin-bottom:-16px; }
+  .nav-item.open .nav-label{ color:var(--red); }
+  .nav-item.open .nav-label svg path{ stroke:var(--red); }
+  .nav-item.open .nav-label svg{ transform:rotate(180deg); }
+  .nav-item.open::after{
+    content:"";
+    position:absolute;
+    left:0; right:26px; bottom:0;
+    height:3px;
+    background:var(--red);
+  }
+
+  .dropdown{
+    display:none;
+    position:absolute;
+    top:100%;
+    margin-top:17px;
+    left:0;
+    background:#fff;
+    box-shadow:0 20px 45px rgba(0,0,0,0.22);
+    padding:26px 30px;
+    min-width:230px;
+    flex-direction:column;
+    gap:22px;
+  }
+  .nav-item.open .dropdown{ display:flex; }
+  .dropdown a{
+    color:var(--ink);
+    text-decoration:none;
+    font-size:16px;
+    font-weight:400;
+    white-space:nowrap;
+  }
+  .dropdown a:hover{ color:var(--red); }
+
+  /* ===== Hero ===== */
+  .hero{
+    width:100%;
+    height:460px;
+    display:block;
+    background:#e5e5e5;
+    overflow:hidden;
+    position:relative;
+  }
+  .hero-photo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+  .hero-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    color:#777;
+    background:#eee;
+  }
+  .hero-fallback code{
+    background:#ddd;
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:14px;
+  }
+
+  /* ===== Content below hero ===== */
+  .content{
+    padding:56px 40px 60px;
+    max-width:900px;
+  }
+  .content h1{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:clamp(30px, 4vw, 46px);
+    line-height:1.15;
+    margin:0 0 22px 0;
+    color:var(--ink);
+  }
+  .content p{
+    font-size:16px;
+    line-height:1.6;
+    color:var(--grey);
+    margin:0 0 32px 0;
+    max-width:640px;
+  }
+  .cta-red{
+    display:inline-block;
+    background:var(--red);
+    color:#fff;
+    font-weight:600;
+    font-size:15px;
+    border:none;
+    border-radius:4px;
+    padding:14px 26px;
+    cursor:pointer;
+    font-family:'Poppins', Arial, sans-serif;
+  }
+
+  /* ===== Programmes section ===== */
+  .programmes{
+    padding:0 40px 70px;
+  }
+  .programmes > p{
+    font-size:16px;
+    line-height:1.6;
+    color:var(--grey);
+    max-width:1000px;
+    margin:0 0 44px 0;
+  }
+  .programmes-heading{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:clamp(26px, 3vw, 36px);
+    margin:0 0 26px 0;
+    color:var(--ink);
+  }
+  .prog-search{
+    display:flex;
+    border:1px solid #ccc;
+    border-radius:4px;
+    overflow:hidden;
+    max-width:100%;
+    margin-bottom:40px;
+  }
+  .prog-search input{
+    flex:1;
+    border:none;
+    outline:none;
+    padding:16px 20px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:16px;
+    color:#333;
+  }
+  .prog-search button{
+    background:var(--red);
+    border:none;
+    width:56px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .prog-search button svg{ width:18px; height:18px; stroke:#fff; }
+
+  .prog-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+  }
+  .prog-card{
+    border:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+  }
+  .prog-photo-wrap{
+    width:100%;
+    aspect-ratio:16/10;
+    background:#e5e5e5;
+    overflow:hidden;
+    position:relative;
+    flex-shrink:0;
+  }
+  .prog-photo-wrap img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+  .prog-photo-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:14px;
+    font-size:13px;
+    line-height:1.5;
+    color:#888;
+    background:#eee;
+  }
+  .prog-photo-fallback code{
+    background:#ddd;
+    padding:1px 5px;
+    border-radius:3px;
+    font-size:12px;
+  }
+  .prog-card-body{
+    padding:24px 26px 28px;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+  .prog-card-body h3{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:24px;
+    margin:0 0 14px 0;
+    color:var(--ink);
+  }
+  .prog-card-body p{
+    font-size:15px;
+    line-height:1.6;
+    color:var(--grey);
+    margin:0 0 22px 0;
+    flex:1;
+  }
+  .prog-explore{
+    display:inline-block;
+    align-self:flex-start;
+    background:var(--red);
+    color:#fff;
+    font-weight:600;
+    font-size:14px;
+    border:none;
+    border-radius:4px;
+    padding:12px 24px;
+    cursor:pointer;
+    font-family:'Poppins', Arial, sans-serif;
+  }
+
+  @media (max-width: 900px){
+    .prog-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ===== Why choose section ===== */
+  .why-section{
+    padding:0 40px 70px;
+  }
+  .why-heading{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:clamp(26px, 3vw, 36px);
+    margin:0 0 26px 0;
+    color:var(--ink);
+  }
+  .why-video-wrap{
+    position:relative;
+    max-width:900px;
+    aspect-ratio:16/9;
+    background:var(--red);
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .why-video-wrap img.why-poster{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+  .why-poster-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    color:#fff;
+    background:var(--red);
+  }
+  .why-poster-fallback code{
+    background:rgba(255,255,255,0.25);
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:14px;
+  }
+  .why-caption{
+    position:absolute;
+    top:28px;
+    left:28px;
+    color:#fff;
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:clamp(28px, 4vw, 46px);
+    line-height:1.18;
+    text-shadow:0 2px 14px rgba(0,0,0,0.35);
+    pointer-events:none;
+  }
+  .why-play-btn{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:76px; height:76px;
+    border-radius:50%;
+    border:3px solid #fff;
+    background:rgba(0,0,0,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .why-play-btn svg{ width:26px; height:26px; margin-left:4px; fill:#fff; }
+  .why-video-wrap video{
+    display:none;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    background:#000;
+  }
+
+  /* ===== Digital guide banner ===== */
+  .digital-guide{
+    position:relative;
+    width:100%;
+    height:460px;
+    overflow:hidden;
+    margin-bottom:60px;
+  }
+  .digital-guide img.dg-photo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+  .dg-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    color:#666;
+    background:#ddd;
+  }
+  .dg-fallback code{
+    background:#ccc;
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:14px;
+  }
+  .dg-panel{
+    position:absolute;
+    top:0; left:0; bottom:0;
+    width:min(46%, 560px);
+    background:linear-gradient(100deg, rgba(232,228,226,0.94) 0%, rgba(232,228,226,0.82) 65%, rgba(232,228,226,0) 100%);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:40px 60px 40px 40px;
+  }
+  .dg-panel h2{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:clamp(24px, 2.6vw, 32px);
+    line-height:1.2;
+    margin:0 0 18px 0;
+    color:var(--ink);
+  }
+  .dg-panel p{
+    font-size:15px;
+    line-height:1.6;
+    color:var(--grey);
+    margin:0 0 26px 0;
+  }
+  .dg-view-btn{
+    display:inline-block;
+    align-self:flex-start;
+    background:var(--red);
+    color:#fff;
+    font-weight:600;
+    font-size:15px;
+    border:none;
+    border-radius:4px;
+    padding:13px 30px;
+    cursor:pointer;
+    font-family:'Poppins', Arial, sans-serif;
+  }
+
+  .section-heading{
+    padding:0 40px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:clamp(26px, 3vw, 36px);
+    margin:0 0 30px 0;
+    color:var(--ink);
+  }
+
+  /* ===== Stat cards ===== */
+  .stat-grid{
+    padding:0 40px 70px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:26px;
+  }
+  .stat-card{
+    border-left:7px solid #8a8a8a;
+    background:#fff;
+    padding:28px 26px;
+  }
+  .stat-card h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 2.6vw, 34px);
+    line-height:1.15;
+    color:#4a4a4a;
+    margin:0 0 18px 0;
+  }
+  .stat-card hr{
+    border:none;
+    border-top:3px solid #d5d5d5;
+    width:60px;
+    margin:0 0 16px 0;
+  }
+  .stat-card .stat-fact{
+    font-weight:700;
+    font-size:16px;
+    line-height:1.4;
+    color:var(--ink);
+    margin:0 0 8px 0;
+  }
+  .stat-card .stat-source{
+    font-style:italic;
+    font-size:13px;
+    line-height:1.5;
+    color:#8a8a8a;
+    margin:0;
+  }
+
+  @media (max-width: 900px){
+    .stat-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .stat-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ===== Testimonials ===== */
+  .testimonials{
+    padding:0 40px 70px;
+  }
+  .testimonial-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:26px;
+  }
+  .testimonial-card{
+    border:1px solid var(--border);
+  }
+  .testimonial-photo-wrap{
+    width:100%;
+    aspect-ratio:4/3;
+    background:#e5e5e5;
+    overflow:hidden;
+    position:relative;
+  }
+  .testimonial-photo-wrap img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+  .testimonial-photo-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:14px;
+    font-size:13px;
+    line-height:1.5;
+    color:#888;
+    background:#eee;
+  }
+  .testimonial-photo-fallback code{
+    background:#ddd;
+    padding:1px 5px;
+    border-radius:3px;
+    font-size:12px;
+  }
+  .testimonial-body{
+    padding:22px 26px 26px;
+  }
+  .testimonial-name{
+    margin:0 0 16px 0;
+    font-size:20px;
+  }
+  .testimonial-name strong{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    color:var(--ink);
+    font-size:24px;
+  }
+  .testimonial-name span{
+    color:#8a8a8a;
+    font-size:15px;
+    margin-left:8px;
+    padding-left:8px;
+    border-left:1px solid #ccc;
+  }
+  .testimonial-quote{
+    font-size:15px;
+    line-height:1.6;
+    color:var(--ink);
+    margin:0 0 20px 0;
+  }
+  .testimonial-pathway{
+    font-size:14px;
+    color:#8a8a8a;
+    margin:0;
+  }
+
+  @media (max-width: 900px){
+    .testimonial-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ===== Footer ===== */
+  .site-footer{
+    background:#141414;
+    color:#e6e6e6;
+    padding:36px 40px 30px;
+  }
+  .footer-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:34px;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer-partner{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .footer-partner span{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:#e6e6e6;
+  }
+  .into-logo{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:26px;
+    letter-spacing:.5px;
+    color:#fff;
+  }
+  .into-logo svg{ width:26px; height:26px; }
+  .footer-social{
+    display:flex;
+    gap:10px;
+  }
+  .footer-social a{
+    width:38px; height:38px;
+    border-radius:6px;
+    background:rgba(255,255,255,0.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .footer-social svg{ width:18px; height:18px; fill:#fff; }
+  .footer-social a:nth-child(2) svg{ width:20px; height:20px; }
+
+  .footer-legal p{
+    font-size:15px;
+    line-height:1.7;
+    margin:0 0 20px 0;
+    color:#e6e6e6;
+  }
+  .footer-legal strong{ font-weight:700; color:#fff; }
+
+  .footer-bottom{
+    font-size:14px;
+    line-height:1.8;
+    color:#bdbdbd;
+    padding-top:18px;
+  }
+  .footer-bottom a{
+    color:#e6e6e6;
+    text-decoration:underline;
+  }
+  .footer-bottom a:hover{ color:#fff; }
+
+  @media (max-width: 820px){
+    .digital-guide{ height:auto; }
+    .dg-panel{ position:static; width:100%; background:#e8e4e2; }
+  }
+
+  @media (max-width: 820px){
+    .topbar{ flex-wrap:wrap; padding:14px 20px; }
+    .search-wrap{ order:3; max-width:100%; margin-top:10px; }
+    .navrow{ padding:12px 20px; gap:20px; overflow-x:auto; }
+    .hero{ height:320px; }
+    .content{ padding:36px 20px 44px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo">
+      <svg class="shield" viewBox="0 0 60 70" xmlns="http://www.w3.org/2000/svg">
+        <path d="M30 2 L56 12 V38 C56 55 45 64 30 68 C15 64 4 55 4 38 V12 Z" fill="#b5121b"/>
+        <path d="M30 8 L50 16 V37 C50 51 41 58 30 62 C19 58 10 51 10 37 V16 Z" fill="#fff"/>
+        <path d="M18 44 Q24 32 30 44 Q36 32 42 44" stroke="#b5121b" stroke-width="2.5" fill="none"/>
+      </svg>
+      <div class="isc-name">International<br>Study Centre</div>
+      <div class="divider"></div>
+      <div class="lu-name">Lancaster<br>University</div>
+    </div>
+
+    <div class="search-wrap">
+      <input type="text" placeholder="Search programmes">
+      <button aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+
+    <div class="topbar-right">
+      <button class="apply-btn">Apply</button>
+      <div class="lang-select">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9s1.3-6.5 3.8-9z"/></svg>
+        En
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="navrow" id="navrow">
+    <div class="nav-item" data-item>
+      <button class="nav-label" type="button">About
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="dropdown">
+        <a href="./visitwebsitabout.html">Student success</a>
+      </div>
+    </div>
+
+    <div class="nav-item" data-item>
+      <button class="nav-label" type="button">Study
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="dropdown">
+        <a href="./visitourwebsiteug.html">Undergraduate</a>
+        <a href="./visitwebsitepg.html">Postgraduate</a>
+        <a href="./visitwebsiteenglish.html">English Language</a>
+        <a href="./visitwebsiteteacher.html">Your teachers</a>
+      </div>
+    </div>
+
+    <div class="nav-item" data-item>
+      <button class="nav-label" type="button">Student life
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="dropdown">
+        <a href="./visitwebsiteliving.html">Living</a>
+        <a href="./visitwebsiteaccomadation.html">Accommodation</a>
+        <a href="./visitwebsiteemployabily.html">Employability</a>
+      </div>
+    </div>
+
+    <div class="nav-item" data-item>
+      <button class="nav-label" type="button">Support
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="dropdown">
+        <a href="./visitwebsitetution.html">Tuition and scholarships</a>
+        <a href="./visitwebsitearrival.html">Pre-arrival</a>
+        <a href="./visitwebsiteapply.html">How to apply</a>
+        <a href="./visitwebsitevisa.html">Visa</a>
+      </div>
+    </div>
+
+    <div class="nav-item plain">
+      <a class="nav-label" href="./visitcontact.html">Contact</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <!-- Replace the src below with your own photo (e.g. "./hero-photo.jpg") -->
+    <img class="hero-photo" src="./Screenshot 2026-07-17 082931.png" alt="Campus hero photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="hero-fallback">Drop your photo in as <code>hero-photo.jpg</code> next to this HTML file<br>(or edit the <code>src</code> on the <code>&lt;img class="hero-photo"&gt;</code> tag)</div>
+  </div>
+
+  <div class="content">
+    <h1>Find your place at a UK top 10 university</h1>
+    <p>Study a tailored pathway programme that offers a guaranteed route to Lancaster University.</p>
+    <button class="cta-red">Apply today</button>
+  </div>
+
+  <div class="programmes">
+    <p>You'll feel at home from the moment you join us at Lancaster University International Study Centre. Become part of a close-knit community on a diverse, town-like campus, where you'll receive expert support to ensure you begin your degree with confidence.</p>
+
+    <h2 class="programmes-heading">Explore our programmes</h2>
+
+    <div class="prog-search">
+      <input type="text" placeholder="Search programmes">
+      <button aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+    </div>
+
+    <div class="prog-grid">
+
+      <div class="prog-card">
+        <div class="prog-photo-wrap">
+          <!-- Replace with your own photo, e.g. "./undergraduate.jpg" -->
+          <img src="./Screenshot 2026-07-17 141107.png" alt="Undergraduate students in a lab" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="prog-photo-fallback">Add photo as <code>undergraduate.jpg</code></div>
+        </div>
+        <div class="prog-card-body">
+          <h3>Undergraduate</h3>
+          <p>An International Foundation will prepare you for Year 1 of 300+ undergraduate degrees in business, computing, engineering, humanities and more.</p>
+          <button class="prog-explore">Explore</button>
+        </div>
+      </div>
+
+      <div class="prog-card">
+        <div class="prog-photo-wrap">
+          <!-- Replace with your own photo, e.g. "./postgraduate.jpg" -->
+          <img src="./Screenshot 2026-07-17 141121.png" alt="Postgraduate students in a lab" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="prog-photo-fallback">Add photo as <code>postgraduate.jpg</code></div>
+        </div>
+        <div class="prog-card-body">
+          <h3>Postgraduate</h3>
+          <p>Gain the academic knowledge and language skills to study a Master's degree with a Pre-Master's in a range of subject pathways.</p>
+          <button class="prog-explore">Explore</button>
+        </div>
+      </div>
+
+      <div class="prog-card">
+        <div class="prog-photo-wrap">
+          <!-- Replace with your own photo, e.g. "./english-language.jpg" -->
+          <img src="./Screenshot 2026-07-17 141131.png" alt="Students studying English on laptops" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="prog-photo-fallback">Add photo as <code>english-language.jpg</code></div>
+        </div>
+        <div class="prog-card-body">
+          <h3>English language</h3>
+          <p>Improve your English level fast with Academic English. An immersive course with flexible start dates and study lengths to suit you.</p>
+          <button class="prog-explore">Explore</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="why-section">
+    <h2 class="why-heading">Why choose Lancaster University?</h2>
+
+    <div class="why-video-wrap" id="whyVideoWrap" onclick="playWhyVideo()">
+      <!-- Replace with your own poster image, e.g. "./pathway-poster.jpg" -->
+      <img class="why-poster" src="./Screenshot 2026-07-17 141537.png" alt="Student on campus" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="why-poster-fallback">Add poster image as <code>pathway-poster.jpg</code></div>
+
+      <div class="why-caption">Discover<br>your<br>pathway<br>to success</div>
+
+      <div class="why-play-btn">
+        <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+      </div>
+
+      <!-- Replace src below with your own video, e.g. "./pathway-video.mp4" -->
+      <video id="whyVideo" controls poster="pathway-poster.jpg">
+        <source src="pathway-video.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+
+  <div class="digital-guide">
+    <!-- Replace with your own photo, e.g. "./digital-guide.jpg" -->
+    <img class="dg-photo" src="./Screenshot 2026-07-17 141551.png" alt="Digital brochure shown on tablet and phone" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="dg-fallback">Add photo as <code>digital-guide.jpg</code></div>
+
+    <div class="dg-panel">
+      <h2>Your digital guide to Lancaster University</h2>
+      <p>Explore Lancaster University through our interactive digital brochure, featuring fast facts, top subjects, student voices, industry connections, career outcomes and much more.</p>
+      <button class="dg-view-btn">View</button>
+    </div>
+  </div>
+
+  <h2 class="section-heading">Why students choose Lancaster University</h2>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <h3>World-ranked</h3>
+      <hr>
+      <p class="stat-fact">World top 170 university</p>
+      <p class="stat-source">(QS World University Rankings 2027)</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Top-ranked</h3>
+      <hr>
+      <p class="stat-fact">UK top 10 university</p>
+      <p class="stat-source">(The Complete University Guide 2027)</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Excellence</h3>
+      <hr>
+      <p class="stat-fact">5 QS Stars for employability, teaching, facilities and research</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>Career prospects</h3>
+      <hr>
+      <p class="stat-fact">Top 30 'most targeted' by top UK graduate employers</p>
+      <p class="stat-source">(The Graduate Market in 2026, High Fliers Research)</p>
+    </div>
+  </div>
+
+  <div class="testimonials">
+    <h2 class="section-heading" style="padding:0; padding-bottom:30px;">What our students say</h2>
+
+    <div class="testimonial-grid">
+
+      <div class="testimonial-card">
+        <div class="testimonial-photo-wrap">
+          <!-- Replace with your own photo, e.g. "./student-safa.jpg" -->
+          <img src="./LAN-card-image-testimonial-Safa.avif" alt="Safa" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="testimonial-photo-fallback">Add photo as <code>student-safa.jpg</code></div>
+        </div>
+        <div class="testimonial-body">
+          <p class="testimonial-name"><strong>Safa</strong><span>Nigeria</span></p>
+          <p class="testimonial-quote">&ldquo;What stood out to me is how inclusive and welcoming the centre is. You're not in a separate building somewhere far away &ndash; you're part of the university from day one.&rdquo;</p>
+          <p class="testimonial-pathway">Pathway: International Foundation</p>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-photo-wrap">
+          <!-- Replace with your own photo, e.g. "./student-frederick.jpg" -->
+          <img src="./LAN-card-image-testimonial-Frederick.avif" alt="Frederick" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="testimonial-photo-fallback">Add photo as <code>student-frederick.jpg</code></div>
+        </div>
+        <div class="testimonial-body">
+          <p class="testimonial-name"><strong>Frederick</strong><span>Kenya</span></p>
+          <p class="testimonial-quote">&ldquo;The support from the centre has been helpful. They made sure I settled in well. During orientation week, they took us to town and gave us a few pointers, which really helped.&rdquo;</p>
+          <p class="testimonial-pathway">Pathway: International Foundation</p>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-photo-wrap">
+          <!-- Replace with your own photo, e.g. "./student-pinyu.jpg" -->
+          <img src="./LAN-card-image-testimonial-Pinyu.avif" alt="Pinyu" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="testimonial-photo-fallback">Add photo as <code>student-pinyu.jpg</code></div>
+        </div>
+        <div class="testimonial-body">
+          <p class="testimonial-name"><strong>Pinyu</strong><span>Taiwan, China</span></p>
+          <p class="testimonial-quote">&ldquo;Compared to big cities, Lancaster is much safer and more affordable, which was what I was looking for. The small class sizes have given me more time with teachers.&rdquo;</p>
+          <p class="testimonial-pathway">Pathway: Pre-Master's</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-partner">
+        <span>IN PARTNERSHIP WITH</span>
+        <div class="into-logo">
+          INTO
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="11" stroke="#fff" stroke-width="1.6"/>
+            <path d="M8 7l4.5 5-4.5 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M13 7l4.5 5-4.5 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/lancasteruniversityisc/?locale=en_GB" target="_blank" aria-label="Facebook">
+          <svg viewBox="0 0 38.49 67.56"><path d="M8.71,39.5v28.07h15.31v-28.07h11.42l2.37-12.91h-13.79v-4.57c0-6.82,2.68-9.43,9.6-9.43,2.15,0,3.88.05,4.88.16V1.05c-1.89-.52-6.51-1.05-9.17-1.05C15.21,0,8.71,6.67,8.71,21.04v5.55H0v12.91h8.71Z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/lancasteruni_isc/" target="_blank" aria-label="Instagram">
+          <svg viewBox="0 0 68.71 68.69"><path d="M61.14,54.6c-1.19,3-3.51,5.32-6.53,6.53-4.52,1.8-15.25,1.38-20.25,1.38s-15.74.4-20.25-1.38c-3-1.19-5.32-3.51-6.53-6.53-1.8-4.52-1.38-15.25-1.38-20.25s-.4-15.74,1.38-20.25c1.19-3,3.51-5.32,6.53-6.53,4.52-1.8,15.25-1.38,20.25-1.38s15.74-.4,20.25,1.38c3,1.19,5.32,3.51,6.53,6.53,1.8,4.52,1.38,15.25,1.38,20.25s.41,15.74-1.38,20.25M68.47,20.18c-.26-5.5-1.52-10.38-5.55-14.39C58.9,1.78,54.03.52,48.53.24,42.86-.08,25.85-.08,20.18.24c-5.49.26-10.36,1.52-14.39,5.53C1.76,9.79.52,14.67.24,20.17-.08,25.84-.08,42.84.24,48.51c.26,5.5,1.52,10.38,5.55,14.39,4.03,4.02,8.89,5.27,14.39,5.55,5.67.32,22.67.32,28.34,0,5.5-.26,10.38-1.52,14.39-5.55,4.02-4.02,5.27-8.89,5.55-14.39.32-5.67.32-22.65,0-28.32M56.8,16.01c0,2.29-1.84,4.11-4.11,4.11s-4.11-1.84-4.11-4.11,1.84-4.11,4.11-4.11,4.11,1.84,4.11,4.11M34.36,45.8c-6.3,0-11.45-5.14-11.45-11.45s5.14-11.45,11.45-11.45,11.45,5.14,11.45,11.45-5.15,11.45-11.45,11.45M34.36,16.73c-9.75,0-17.61,7.87-17.61,17.61s7.87,17.61,17.61,17.61,17.61-7.86,17.61-17.61-7.87-17.61-17.61-17.61"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <p><strong>INTO Lancaster Limited</strong>, trading as Lancaster University International Study Centre, is a limited liability partnership registered in England and Wales, registered number 14819227</p>
+      <p><strong>Registered Office:</strong> One Gloucester Place, Brighton, East Sussex, BN1 4AA, UK</p>
+      <p><strong>VAT registration number:</strong> 123 4160 57</p>
+      <p><strong>Education provider sponsor number 6FY6FQBV1</strong>, INTO Lancaster Limited is a teaching site on the Sponsor Licence of INTO Manchester Limited</p>
+    </div>
+
+    <div class="footer-bottom">
+      &copy; Copyright 2026 | INTO UNIVERSITY PARTNERSHIPS LTD AND IUP 2 LLP <a href="#">&#27801;ICP&#22791;14028023&#21495;-3</a> | <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Cookies Policy</a> | <a href="#">Governance</a> | <a href="#">Accessibility</a> | <a href="#">Modern Slavery</a>
+    </div>
+  </footer>
+
+  <script>
+    function playWhyVideo(){
+      const wrap = document.getElementById('whyVideoWrap');
+      const video = document.getElementById('whyVideo');
+      wrap.querySelector('.why-poster').style.display = 'none';
+      wrap.querySelector('.why-poster-fallback').style.display = 'none';
+      wrap.querySelector('.why-caption').style.display = 'none';
+      wrap.querySelector('.why-play-btn').style.display = 'none';
+      video.style.display = 'block';
+      video.play().catch(() => {
+        /* No video file at "pathway-video.mp4" yet — add yours to enable playback. */
+      });
+    }
+  </script>
+
+  <script>
+    const items = document.querySelectorAll('#navrow .nav-item[data-item]');
+    items.forEach(item => {
+      const label = item.querySelector('.nav-label');
+      label.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = item.classList.contains('open');
+        items.forEach(i => i.classList.remove('open'));
+        if(!isOpen) item.classList.add('open');
+      });
+    });
+    document.addEventListener('click', () => {
+      items.forEach(i => i.classList.remove('open'));
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lancaster University International Study Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#b5121b;
+    --dark:#1a1a1a;
+    --white:#ffffff;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:'Poppins', Arial, sans-serif;
+    color:var(--dark);
+  }
+
+  /* ===== utility bar ===== */
+  .utility-bar{
+    display:flex;
+    align-items:center;
+    gap:40px;
+    padding:16px 40px;
+    border-bottom:1px solid #eee;
+  }
+  .utility-logo{ height:52px; flex-shrink:0; }
+  .utility-logo img{ height:100%; width:auto; display:block; }
+
+  .search-box{
+    display:flex;
+    align-items:stretch;
+    border:1.5px solid #1a1a1a;
+    border-radius:4px;
+    overflow:hidden;
+    width:320px;
+    flex-shrink:0;
+  }
+  .search-box input{
+    border:none;
+    outline:none;
+    padding:10px 14px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    color:var(--dark);
+    width:100%;
+  }
+  .search-box button{
+    background:var(--red);
+    border:none;
+    width:44px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .search-box button svg{ width:16px; height:16px; }
+  .search-box button svg circle,
+  .search-box button svg line{ stroke:var(--white); }
+
+  .utility-spacer{ flex:1; }
+
+  .right-controls{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex-shrink:0;
+  }
+  .apply-btn{
+    border:1.5px solid var(--dark);
+    border-radius:4px;
+    background:var(--white);
+    color:var(--dark);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:9px 26px;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .lang-select{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:600;
+    font-size:15px;
+    color:var(--dark);
+    cursor:pointer;
+    user-select:none;
+  }
+  .lang-select svg.globe{ width:20px; height:20px; }
+  .lang-select svg.globe circle,
+  .lang-select svg.globe path,
+  .lang-select svg.globe line{ stroke:var(--dark); fill:none; }
+  .lang-select svg.chev{ width:10px; height:10px; }
+  .lang-select svg.chev path{ stroke:var(--dark); stroke-width:1.6; fill:none; }
+
+  @media (max-width:900px){
+    .utility-bar{ flex-wrap:wrap; gap:16px; padding:16px 20px; }
+    .search-box{ order:3; width:100%; }
+    .utility-spacer{ display:none; }
+  }
+
+  /* ===== top nav ===== */
+  .navbar{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:34px;
+    background:var(--white);
+    padding:22px 40px;
+    z-index:20;
+  }
+  .nav-item{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    font-size:16px;
+    color:var(--dark);
+    cursor:pointer;
+    padding-bottom:14px;
+    user-select:none;
+  }
+  .nav-item .chevron{ width:10px; height:10px; transition:transform .2s ease; }
+  .nav-item.open{ color:var(--red); }
+  .nav-item.open .chevron{ transform:rotate(180deg); }
+  .nav-item.open::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:3px;
+    background:var(--red);
+  }
+  .nav-item.no-caret{ font-weight:600; }
+  .dropdown{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width:230px;
+    background:var(--white);
+    box-shadow:0 18px 30px rgba(0,0,0,0.18);
+    padding:6px 0;
+    z-index:30;
+  }
+  .nav-item.open .dropdown{ display:block; }
+  .dropdown a{
+    display:block;
+    padding:16px 24px;
+    font-size:15px;
+    font-weight:400;
+    color:var(--dark);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .dropdown a:hover{ background:#f5f5f5; color:var(--red); }
+  .dropdown a.current{ color:var(--red); font-weight:600; }
+  .chevron path{ stroke:var(--red); stroke-width:1.6; fill:none; }
+
+  @media (max-width:700px){
+    .navbar{ flex-wrap:wrap; gap:18px; padding:18px 20px; }
+  }
+
+  /* ===== page banner ===== */
+  .banner{
+    width:100%;
+    height:clamp(220px, 34vw, 480px);
+    overflow:hidden;
+  }
+  .banner img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 40%;
+    display:block;
+  }
+
+  /* ===== page heading ===== */
+  .page-intro{
+    padding:36px 60px 50px;
+    max-width:1150px;
+  }
+  .page-intro h1{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(32px, 4vw, 52px);
+    margin:0 0 18px;
+    color:var(--dark);
+  }
+  .page-intro p{
+    font-size:17px;
+    line-height:1.5;
+    color:#333;
+    margin:0 0 26px;
+  }
+  .explore-btn-top{
+    display:inline-block;
+    background:var(--red);
+    color:var(--white);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:12px 22px;
+    text-decoration:none;
+    border-radius:3px;
+  }
+
+  @media (max-width:700px){
+    .page-intro{ padding:28px 24px 40px; }
+  }
+
+  /* ===== why / stats section ===== */
+  .stats-section{
+    padding:10px 60px 50px;
+    max-width:1300px;
+  }
+  .stats-section h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0 0 30px;
+    color:var(--dark);
+  }
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:28px;
+  }
+  .stat-card{
+    border:1px solid #ddd;
+    border-left:6px solid #999;
+    padding:26px 24px;
+  }
+  .stat-card h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:32px;
+    line-height:1.15;
+    color:#4a4a4a;
+    margin:0 0 16px;
+  }
+  .stat-card .rule{
+    height:3px;
+    width:100%;
+    background:#ddd;
+    margin:0 0 16px;
+  }
+  .stat-card .stat-text{
+    font-weight:700;
+    font-size:16px;
+    line-height:1.4;
+    color:#2b2b2b;
+    margin:0 0 10px;
+  }
+  .stat-card .stat-cite{
+    font-style:italic;
+    font-size:13.5px;
+    line-height:1.4;
+    color:#8a8a8a;
+    margin:0;
+  }
+
+  @media (max-width:1100px){
+    .stats-grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width:700px){
+    .stats-section{ padding:10px 24px 40px; }
+    .stats-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ===== generic section heading (e.g. Get Work Ready) ===== */
+  .section-heading{
+    padding:10px 60px 0;
+    max-width:1300px;
+  }
+  .section-heading h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0;
+    color:var(--dark);
+  }
+  @media (max-width:700px){
+    .section-heading{ padding:10px 24px 0; }
+  }
+
+  /* ===== work-experience video section ===== */
+  .video-section{
+    padding:26px 60px 10px;
+    max-width:1300px;
+  }
+  .video-wrap{
+    position:relative;
+    max-width:1000px;
+    aspect-ratio:16/9;
+    background:var(--red);
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .video-wrap img.video-poster{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+  .video-poster-fallback{
+    display:none;
+    position:absolute;
+    inset:0;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    line-height:1.6;
+    color:#fff;
+    background:var(--red);
+  }
+  .video-poster-fallback code{
+    background:rgba(255,255,255,0.25);
+    padding:2px 6px;
+    border-radius:3px;
+    font-size:14px;
+  }
+  .video-caption{
+    position:absolute;
+    top:32px;
+    left:32px;
+    color:#fff;
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(28px, 4vw, 46px);
+    line-height:1.18;
+    text-shadow:0 2px 14px rgba(0,0,0,0.35);
+    pointer-events:none;
+  }
+  .video-play-btn{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:76px; height:76px;
+    border-radius:50%;
+    border:3px solid #fff;
+    background:rgba(0,0,0,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .video-play-btn svg{ width:26px; height:26px; margin-left:4px; fill:#fff; }
+  .video-wrap video{
+    display:none;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    background:#000;
+  }
+
+  .work-exp-heading{
+    padding:36px 60px 0;
+    max-width:1300px;
+  }
+  .work-exp-heading h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0;
+    color:var(--dark);
+  }
+
+  @media (max-width:700px){
+    .video-section{ padding:22px 24px 10px; }
+    .work-exp-heading{ padding:30px 24px 0; }
+  }
+
+  /* ===== work experience cards ===== */
+  .exp-grid{
+    padding:34px 60px 10px;
+    max-width:1300px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:34px;
+  }
+  .exp-card{
+    border:1px solid #ddd;
+    padding:44px 34px;
+    text-align:center;
+  }
+  .exp-card .icon-wrap{
+    height:90px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 26px;
+  }
+  .exp-card .icon-wrap svg{ width:88px; height:88px; }
+  .exp-card h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:24px;
+    line-height:1.25;
+    margin:0 0 18px;
+    color:var(--dark);
+  }
+  .exp-card p{
+    font-size:15px;
+    line-height:1.6;
+    color:#333;
+    margin:0;
+  }
+
+  @media (max-width:1000px){
+    .exp-grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:700px){
+    .exp-grid{ padding:28px 24px 10px; }
+  }
+
+  /* ===== virtual internships ===== */
+  .virtual-section{
+    padding:40px 60px 60px;
+    max-width:1150px;
+  }
+  .virtual-section h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(24px, 2.6vw, 32px);
+    margin:0 0 22px;
+    color:var(--dark);
+  }
+  .virtual-section p{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin:0 0 20px;
+  }
+  .virtual-section p.note{
+    color:#555;
+  }
+
+  @media (max-width:700px){
+    .virtual-section{ padding:30px 24px 44px; }
+  }
+
+  /* ===== launch your career section ===== */
+  .career-section{
+    padding:0 60px 40px;
+    max-width:1150px;
+  }
+  .career-section h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0 0 22px;
+    color:var(--dark);
+  }
+  .career-section p{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin:0 0 20px;
+  }
+  .career-btn{
+    display:inline-block;
+    background:var(--red);
+    color:#fff;
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:14px 26px;
+    border:none;
+    border-radius:4px;
+    text-decoration:none;
+    cursor:pointer;
+    margin-top:6px;
+  }
+
+  /* ===== CTA banner ===== */
+  .cta-banner{
+    margin:44px 60px 60px;
+    border:1.5px solid var(--red);
+    padding:56px 40px;
+    text-align:center;
+    max-width:1300px;
+  }
+  .cta-banner h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(24px, 3vw, 34px);
+    color:var(--red);
+    margin:0 0 30px;
+  }
+  .cta-banner .career-btn{ margin-top:0; }
+
+  @media (max-width:700px){
+    .career-section{ padding:0 24px 34px; }
+    .cta-banner{ margin:36px 24px 50px; padding:40px 22px; }
+  }
+
+  /* ===== Footer ===== */
+  .site-footer{
+    background:#141414;
+    color:#e6e6e6;
+    padding:36px 40px 30px;
+    margin-top:20px;
+  }
+  .footer-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:34px;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer-partner{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .footer-partner span{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:#e6e6e6;
+  }
+  .into-logo{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:26px;
+    letter-spacing:.5px;
+    color:#fff;
+  }
+  .into-logo svg{ width:26px; height:26px; }
+  .footer-social{
+    display:flex;
+    gap:10px;
+  }
+  .footer-social a{
+    width:38px; height:38px;
+    border-radius:6px;
+    background:rgba(255,255,255,0.08);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .footer-social svg{ width:18px; height:18px; fill:#fff; }
+  .footer-social a:nth-child(2) svg{ width:20px; height:20px; }
+
+  .footer-legal p{
+    font-size:15px;
+    line-height:1.7;
+    margin:0 0 20px 0;
+    color:#e6e6e6;
+  }
+  .footer-legal strong{ font-weight:700; color:#fff; }
+
+  .footer-bottom{
+    font-size:14px;
+    line-height:1.8;
+    color:#bdbdbd;
+    padding-top:18px;
+  }
+  .footer-bottom a{
+    color:#e6e6e6;
+    text-decoration:underline;
+  }
+  .footer-bottom a:hover{ color:#fff; }
+</style>
+</head>
+<body>
+
+<div class="utility-bar">
+  <div class="utility-logo">
+    <img src="./Screenshot 2026-07-17 145528.png" alt="International Study Centre | Lancaster University">
+  </div>
+
+  <div class="search-box">
+    <input type="text" placeholder="Search programmes">
+    <button aria-label="Search">
+      <svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="6.5" fill="none" stroke-width="2"/><line x1="14" y1="14" x2="19" y2="19" stroke-width="2"/></svg>
+    </button>
+  </div>
+
+  <div class="utility-spacer"></div>
+
+  <div class="right-controls">
+    <a href="#" class="apply-btn">Apply</a>
+    <div class="lang-select">
+      <svg class="globe" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke-width="1.5"/><path d="M2 10h16M10 2c2.5 2.5 2.5 13 0 16M10 2c-2.5 2.5-2.5 13 0 16" stroke-width="1.5"/></svg>
+      <span>En</span>
+      <svg class="chev" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-item" data-menu="about">
+    About
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="#">Student success</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="study">
+    Study
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitourwebsiteug.html">Undergraduate</a>
+      <a href="./visitwebsitepg.html">Postgraduate</a>
+      <a href="./visitwebsiteenglish.html">English Language</a>
+      <a href="./visitwebsiteteacher.html">Your teachers</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="student-life">
+    Student life
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsiteliving.html">Living</a>
+      <a href="./visitwebsiteaccomadation.html">Accommodation</a>
+      <a href="./visitwebsiteemployabily.html">Employability</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="support">
+    Support
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsitetution.html">Tuition and scholarships</a>
+      <a href="./visitwebsitearrival.html">Pre-arrival</a>
+      <a href="./visitwebsiteapply.html">How to apply</a>
+      <a href="./visitwebsitevisa.html">Visa</a>
+    </div>
+  </div>
+
+  <div class="nav-item no-caret" data-menu="">
+   <a href="./visitcontact.html">Contact</a>
+  </div>
+</nav>
+
+<div class="banner">
+  <img src="./Screenshot 2026-07-17 150256.png" alt="Two students walking and chatting outside a university building">
+</div>
+
+<div class="page-intro">
+  <h1>Preparing for your future career</h1>
+  <p>Build strong foundations for the future at the International Study Centre. Then, become a highly employable graduate at Lancaster University.</p>
+  <a href="#" class="explore-btn-top">Get work ready</a>
+</div>
+
+<div class="stats-section">
+  <h2>Why build your future at Lancaster University?</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Employable graduates</h3>
+      <div class="rule"></div>
+      <p class="stat-text">Top 30 'most targeted' by the UK's top graduate employers</p>
+      <p class="stat-cite">(The Graduate Market in 2026, High Fliers Research)</p>
+    </div>
+    <div class="stat-card">
+      <h3>Future focus</h3>
+      <div class="rule"></div>
+      <p class="stat-text">5 QS Stars for employability</p>
+      <p class="stat-cite">(QS Stars Rating 2024)</p>
+    </div>
+    <div class="stat-card">
+      <h3>Career support</h3>
+      <div class="rule"></div>
+      <p class="stat-text">Lancaster graduates have lifetime access to support from the Careers and Employability Service.</p>
+    </div>
+    <div class="stat-card">
+      <h3>Alumni success</h3>
+      <div class="rule"></div>
+      <p class="stat-text">Graduates work at the BBC, Deloitte, Disney, Google, HSBC, IBM, P&G, Warner Bros and more.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-heading">
+  <h2>Get Work Ready</h2>
+</div>
+
+<div class="video-section">
+  <div class="video-wrap" id="workVideoWrap" onclick="playWorkVideo()">
+    <!-- Replace with your own poster image, e.g. "./stand-out-poster.jpg" -->
+    <img class="video-poster" src="./2024_Video_UK_All-brands_GetWorkReady_Promo_2x1_EN.mp4" alt="Student holding books in a corridor" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="video-poster-fallback"> <code></code></div>
+
+    <div class="video-caption">Stand out from<br>the crowd</div>
+
+    <div class="video-play-btn">
+      <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+    </div>
+
+    <!-- Replace src below with your own video, e.g. "./stand-out.mp4" -->
+    <video id="workVideo" controls poster="stand-out-poster.jpg">
+      <source src="stand-out.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<div class="work-exp-heading">
+  <h2>Work experience while you study</h2>
+</div>
+
+<div class="exp-grid">
+  <div class="exp-card">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M45 15a28 28 0 1 0 0.01 0Z" stroke="#1a1a1a" stroke-width="2.2"/>
+        <path d="M45 15A28 28 0 0 0 21 59L45 43Z" fill="#b5121b"/>
+        <line x1="45" y1="43" x2="45" y2="24" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="15" y1="15" x2="75" y2="75" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round"/>
+        <rect x="52" y="58" width="26" height="19" rx="2" fill="#fff" stroke="#1a1a1a" stroke-width="2.2"/>
+        <path d="M60 58v-3a5 5 0 0 1 10 0v3" stroke="#1a1a1a" stroke-width="2.2" fill="none"/>
+        <line x1="52" y1="66" x2="78" y2="66" stroke="#1a1a1a" stroke-width="2"/>
+      </svg>
+    </div>
+    <h3>Part-time jobs</h3>
+    <p>Gain experience and earn money with a part-time job. If you have a Student visa, you can work full-time during holidays and limited hours during term time. Just follow your visa conditions.</p>
+  </div>
+
+  <div class="exp-card">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="16" width="30" height="42" rx="3" fill="#fff" stroke="#1a1a1a" stroke-width="2.2"/>
+        <rect x="21" y="23" width="16" height="14" rx="1.5" fill="#b5121b"/>
+        <line x1="21" y1="42" x2="37" y2="42" stroke="#1a1a1a" stroke-width="2"/>
+        <line x1="21" y1="48" x2="37" y2="48" stroke="#1a1a1a" stroke-width="2"/>
+        <rect x="40" y="36" width="36" height="26" rx="2.5" fill="#fff" stroke="#1a1a1a" stroke-width="2.2"/>
+        <path d="M50 36v-5a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v5" stroke="#1a1a1a" stroke-width="2.2" fill="none"/>
+        <line x1="40" y1="49" x2="76" y2="49" stroke="#1a1a1a" stroke-width="2"/>
+        <rect x="55" y="45" width="6" height="7" rx="1" fill="#1a1a1a"/>
+      </svg>
+    </div>
+    <h3>Internships and placements</h3>
+    <p>Many degrees include work experience. If yours doesn't, the university's Careers and Employability Service will help you find an internship or placement.</p>
+  </div>
+
+  <div class="exp-card">
+    <div class="icon-wrap">
+      <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 40v10h8l14 8V32l-14 8Z" fill="#fff" stroke="#1a1a1a" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M12 40h8v10h-8Z" fill="#b5121b" stroke="#1a1a1a" stroke-width="2.2" stroke-linejoin="round"/>
+        <line x1="34" y1="30" x2="34" y2="60" stroke="#1a1a1a" stroke-width="2.2"/>
+        <circle cx="66" cy="30" r="10" fill="#fff" stroke="#1a1a1a" stroke-width="2.2"/>
+        <path d="M50 78c0-12 7-20 16-20s16 8 16 20" stroke="#1a1a1a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h3>Student Ambassadors</h3>
+    <p>Support the marketing team and represent the centre. Build your confidence, expand your network and make your CV stand out.</p>
+  </div>
+</div>
+
+<div class="virtual-section">
+  <h2>Virtual Internships</h2>
+  <p>We've partnered with Virtual Internships &ndash; an award-winning platform for online work experience. They provide opportunities with 3,500+ companies in 70 countries. You'll complete your internship during the summer between your pathway and degree. Find out more when you arrive at the centre.</p>
+  <p class="note">(Extra costs apply, 18+ only)</p>
+</div>
+
+<div class="career-section">
+  <h2>Launch your career in the UK</h2>
+  <p>Want to work in the UK when you graduate? Good news &ndash; as an international student, you may be eligible to stay once you've successfully completed your degree.</p>
+  <p>You can find more information about post-study work options &ndash; including visa guidance, length of stay and how to apply &ndash; on Lancaster University website.</p>
+  <a href="#" class="career-btn">Explore post-study work visas</a>
+</div>
+
+<div class="cta-banner">
+  <h2>Ready to start your journey to global career success?</h2>
+  <a href="#" class="career-btn">Explore programmes</a>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-partner">
+      <span>IN PARTNERSHIP WITH</span>
+      <div class="into-logo">
+        INTO
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="11" stroke="#fff" stroke-width="1.6"/>
+          <path d="M8 7l4.5 5-4.5 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M13 7l4.5 5-4.5 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/lancasteruniversityisc/?locale=en_GB" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 38.49 67.56"><path d="M8.71,39.5v28.07h15.31v-28.07h11.42l2.37-12.91h-13.79v-4.57c0-6.82,2.68-9.43,9.6-9.43,2.15,0,3.88.05,4.88.16V1.05c-1.89-.52-6.51-1.05-9.17-1.05C15.21,0,8.71,6.67,8.71,21.04v5.55H0v12.91h8.71Z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/lancasteruni_isc/" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 68.71 68.69"><path d="M61.14,54.6c-1.19,3-3.51,5.32-6.53,6.53-4.52,1.8-15.25,1.38-20.25,1.38s-15.74.4-20.25-1.38c-3-1.19-5.32-3.51-6.53-6.53-1.8-4.52-1.38-15.25-1.38-20.25s-.4-15.74,1.38-20.25c1.19-3,3.51-5.32,6.53-6.53,4.52-1.8,15.25-1.38,20.25-1.38s15.74-.4,20.25,1.38c3,1.19,5.32,3.51,6.53,6.53,1.8,4.52,1.38,15.25,1.38,20.25s.41,15.74-1.38,20.25M68.47,20.18c-.26-5.5-1.52-10.38-5.55-14.39C58.9,1.78,54.03.52,48.53.24,42.86-.08,25.85-.08,20.18.24c-5.49.26-10.36,1.52-14.39,5.53C1.76,9.79.52,14.67.24,20.17-.08,25.84-.08,42.84.24,48.51c.26,5.5,1.52,10.38,5.55,14.39,4.03,4.02,8.89,5.27,14.39,5.55,5.67.32,22.67.32,28.34,0,5.5-.26,10.38-1.52,14.39-5.55,4.02-4.02,5.27-8.89,5.55-14.39.32-5.67.32-22.65,0-28.32M56.8,16.01c0,2.29-1.84,4.11-4.11,4.11s-4.11-1.84-4.11-4.11,1.84-4.11,4.11-4.11,4.11,1.84,4.11,4.11M34.36,45.8c-6.3,0-11.45-5.14-11.45-11.45s5.14-11.45,11.45-11.45,11.45,5.14,11.45,11.45-5.15,11.45-11.45,11.45M34.36,16.73c-9.75,0-17.61,7.87-17.61,17.61s7.87,17.61,17.61,17.61,17.61-7.86,17.61-17.61-7.87-17.61-17.61-17.61"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <p><strong>INTO Lancaster Limited</strong>, trading as Lancaster University International Study Centre, is a limited liability partnership registered in England and Wales, registered number 14819227</p>
+    <p><strong>Registered Office:</strong> One Gloucester Place, Brighton, East Sussex, BN1 4AA, UK</p>
+    <p><strong>VAT registration number:</strong> 123 4160 57</p>
+    <p><strong>Education provider sponsor number 6FY6FQBV1</strong>, INTO Lancaster Limited is a teaching site on the Sponsor Licence of INTO Manchester Limited</p>
+  </div>
+
+  <div class="footer-bottom">
+    &copy; Copyright 2026 | INTO UNIVERSITY PARTNERSHIPS LTD AND IUP 2 LLP <a href="#">&#27801;ICP&#22791;14028023&#21495;-3</a> | <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Cookies Policy</a> | <a href="#">Governance</a> | <a href="#">Accessibility</a> | <a href="#">Modern Slavery</a>
+  </div>
+</footer>
+
+<script>
+  const items = document.querySelectorAll('.nav-item[data-menu]');
+  items.forEach(item => {
+    const menuName = item.getAttribute('data-menu');
+    if(!menuName) return;
+    item.addEventListener('click', (e) => {
+      const isOpen = item.classList.contains('open');
+      items.forEach(i => i.classList.remove('open'));
+      if(!isOpen){ item.classList.add('open'); }
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click', () => {
+    items.forEach(i => i.classList.remove('open'));
+  });
+
+  function playWorkVideo(){
+    const wrap = document.getElementById('workVideoWrap');
+    const video = document.getElementById('workVideo');
+    wrap.querySelector('.video-poster').style.display = 'none';
+    wrap.querySelector('.video-poster-fallback').style.display = 'none';
+    wrap.querySelector('.video-caption').style.display = 'none';
+    wrap.querySelector('.video-play-btn').style.display = 'none';
+    video.style.display = 'block';
+    video.play().catch(() => {
+      /* No video file at "stand-out.mp4" yet — add yours to enable playback. */
+    });
+  }
+</script>
+</body>
+</html>

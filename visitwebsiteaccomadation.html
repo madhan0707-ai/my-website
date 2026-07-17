@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lancaster University International Study Centre — Header</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#b5121b;
+    --dark:#1a1a1a;
+    --white:#ffffff;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:'Poppins', Arial, sans-serif;
+    color:var(--dark);
+  }
+
+  /* ===== utility bar ===== */
+  .utility-bar{
+    display:flex;
+    align-items:center;
+    gap:40px;
+    padding:16px 40px;
+    border-bottom:1px solid #eee;
+  }
+  .utility-logo{ height:52px; flex-shrink:0; }
+  .utility-logo img{ height:100%; width:auto; display:block; }
+
+  .search-box{
+    display:flex;
+    align-items:stretch;
+    border:1.5px solid #1a1a1a;
+    border-radius:4px;
+    overflow:hidden;
+    width:320px;
+    flex-shrink:0;
+  }
+  .search-box input{
+    border:none;
+    outline:none;
+    padding:10px 14px;
+    font-family:'Poppins', Arial, sans-serif;
+    font-size:15px;
+    color:var(--dark);
+    width:100%;
+  }
+  .search-box button{
+    background:var(--red);
+    border:none;
+    width:44px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .search-box button svg{ width:16px; height:16px; }
+  .search-box button svg circle,
+  .search-box button svg line{ stroke:var(--white); }
+
+  .utility-spacer{ flex:1; }
+
+  .right-controls{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex-shrink:0;
+  }
+  .apply-btn{
+    border:1.5px solid var(--dark);
+    border-radius:4px;
+    background:var(--white);
+    color:var(--dark);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:9px 26px;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .lang-select{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:600;
+    font-size:15px;
+    color:var(--dark);
+    cursor:pointer;
+    user-select:none;
+  }
+  .lang-select svg.globe{ width:20px; height:20px; }
+  .lang-select svg.globe circle,
+  .lang-select svg.globe path,
+  .lang-select svg.globe line{ stroke:var(--dark); fill:none; }
+  .lang-select svg.chev{ width:10px; height:10px; }
+  .lang-select svg.chev path{ stroke:var(--dark); stroke-width:1.6; fill:none; }
+
+  @media (max-width:900px){
+    .utility-bar{ flex-wrap:wrap; gap:16px; padding:16px 20px; }
+    .search-box{ order:3; width:100%; }
+    .utility-spacer{ display:none; }
+  }
+
+  /* ===== top nav ===== */
+  .navbar{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:34px;
+    background:var(--white);
+    padding:22px 40px;
+    z-index:20;
+  }
+  .nav-item{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    font-size:16px;
+    color:var(--dark);
+    cursor:pointer;
+    padding-bottom:14px;
+    user-select:none;
+  }
+  .nav-item .chevron{ width:10px; height:10px; transition:transform .2s ease; }
+  .nav-item.open{ color:var(--red); }
+  .nav-item.open .chevron{ transform:rotate(180deg); }
+  .nav-item.open::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:3px;
+    background:var(--red);
+  }
+  .nav-item.no-caret{ font-weight:600; }
+  .dropdown{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    min-width:230px;
+    background:var(--white);
+    box-shadow:0 18px 30px rgba(0,0,0,0.18);
+    padding:6px 0;
+    z-index:30;
+  }
+  .nav-item.open .dropdown{ display:block; }
+  .dropdown a{
+    display:block;
+    padding:16px 24px;
+    font-size:15px;
+    font-weight:400;
+    color:var(--dark);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .dropdown a:hover{ background:#f5f5f5; color:var(--red); }
+  .dropdown a.current{ color:var(--red); font-weight:600; }
+  .chevron path{ stroke:var(--red); stroke-width:1.6; fill:none; }
+
+  @media (max-width:700px){
+    .navbar{ flex-wrap:wrap; gap:18px; padding:18px 20px; }
+  }
+
+  /* ===== page banner ===== */
+  .banner{
+    width:100%;
+    height:clamp(220px, 34vw, 480px);
+    overflow:hidden;
+  }
+  .banner img{
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 40%;
+    display:block;
+  }
+
+  /* ===== page heading ===== */
+  .page-intro{
+    padding:36px 60px 50px;
+    max-width:1150px;
+  }
+  .page-intro h1{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(32px, 4vw, 52px);
+    margin:0 0 18px;
+    color:var(--dark);
+  }
+  .page-intro p{
+    font-size:17px;
+    line-height:1.5;
+    color:#333;
+    margin:0 0 26px;
+  }
+  .explore-btn-top{
+    display:inline-block;
+    background:var(--red);
+    color:var(--white);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:12px 22px;
+    text-decoration:none;
+    border-radius:3px;
+  }
+
+  @media (max-width:700px){
+    .page-intro{ padding:28px 24px 40px; }
+  }
+
+  /* ===== accommodation options section ===== */
+  .accom-section{
+    padding:10px 60px 60px;
+    max-width:1300px;
+  }
+  .accom-section h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0 0 24px;
+    color:var(--dark);
+  }
+  .accom-section p{
+    font-size:16px;
+    line-height:1.6;
+    color:#333;
+    margin:0 0 20px;
+    max-width:1150px;
+  }
+
+  .testimonial-video{
+    position:relative;
+    max-width:1285px;
+    height:clamp(340px, 42vw, 515px);
+    background:var(--red);
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .testimonial-video video{
+    position:absolute;
+    left:153px; top:0;
+    width:clamp(280px, 36vw, 468px);
+    height:100%;
+    object-fit:cover;
+    display:block;
+    background:#000;
+  }
+  .testimonial-video .name-bar{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:22%;
+    background:#575757;
+    border-top:4px solid #d9d9d9;
+    display:flex;
+    align-items:center;
+    padding-left:calc(153px + clamp(280px, 36vw, 468px) + 32px);
+  }
+  .testimonial-video .name-bar span{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(28px, 3.4vw, 44px);
+    color:var(--white);
+  }
+  .testimonial-video .video-play-btn{
+    position:absolute;
+    top:50%; left:calc(153px + clamp(280px, 36vw, 468px));
+    transform:translate(-50%,-50%);
+    width:76px; height:76px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.35);
+    border:3px solid var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2;
+  }
+  .testimonial-video .video-play-btn.hidden{ display:none; }
+  .testimonial-video .video-play-btn svg{ width:26px; height:26px; margin-left:4px; }
+
+  @media (max-width:900px){
+    .accom-section{ padding:10px 24px 40px; }
+    .testimonial-video video{ left:0; width:100%; }
+    .testimonial-video .name-bar{ padding-left:24px; }
+    .testimonial-video .video-play-btn{ left:50%; }
+  }
+
+  /* ===== gallery strip ===== */
+  .gallery-section{ padding:30px 60px 0; }
+  .gallery-strip{
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .gallery-strip::-webkit-scrollbar{ display:none; }
+  .gallery-thumb{
+    position:relative;
+    flex:0 0 auto;
+    width:238px;
+    height:161px;
+    border:1px solid #ddd;
+    overflow:hidden;
+    cursor:pointer;
+    background:#000;
+  }
+  .gallery-thumb img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .gallery-thumb.active{
+    border:3px solid #1a73e8;
+    box-shadow:0 0 0 1px #1a73e8;
+  }
+  .gallery-thumb .thumb-caption{
+    position:absolute;
+    left:0; bottom:0;
+    display:flex;
+    flex-direction:column;
+    pointer-events:none;
+  }
+  .gallery-thumb .thumb-caption span{
+    color:var(--white);
+    font-weight:700;
+    font-size:13px;
+    padding:2px 8px;
+    width:fit-content;
+    white-space:nowrap;
+  }
+  .gallery-thumb .thumb-play{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:52px; height:52px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.35);
+    border:2.5px solid var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+  }
+  .gallery-thumb .thumb-play svg{ width:18px; height:18px; margin-left:3px; }
+
+  .gallery-controls{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 0 34px;
+  }
+  .gallery-dots{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0 auto;
+  }
+  .gallery-dots .dot{
+    width:9px; height:9px;
+    border-radius:50%;
+    background:#ccc;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .gallery-dots .dot.active{
+    width:26px;
+    border-radius:5px;
+    background:#1a73e8;
+  }
+  .gallery-arrows{
+    display:flex;
+    gap:10px;
+    flex-shrink:0;
+  }
+  .gallery-arrows button{
+    width:34px; height:34px;
+    border-radius:50%;
+    background:#1a73e8;
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .gallery-arrows button svg{ width:14px; height:14px; }
+  .gallery-arrows button svg path{ stroke:var(--white); stroke-width:2.2; fill:none; }
+
+  @media (max-width:700px){
+    .gallery-section{ padding:24px 24px 0; }
+    .gallery-controls{ padding:16px 0 26px; }
+  }
+
+  /* ===== accordion ===== */
+  .accordion{ padding:20px 60px 40px; max-width:1300px; }
+  .accordion-item{ border-bottom:1px solid #ccc; }
+  .accordion-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 0;
+    cursor:pointer;
+  }
+  .accordion-header h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:22px;
+    color:#555;
+    margin:0;
+  }
+  .accordion-header svg{
+    width:18px; height:18px;
+    transition:transform .2s ease;
+    flex-shrink:0;
+  }
+  .accordion-header svg path{ stroke:#555; stroke-width:1.8; fill:none; }
+  .accordion-item.open .accordion-header svg{ transform:rotate(180deg); }
+  .accordion-panel{
+    display:none;
+    padding:0 0 24px;
+    font-size:15px;
+    line-height:1.6;
+    color:#333;
+  }
+  .accordion-item.open .accordion-panel{ display:block; }
+
+  @media (max-width:700px){
+    .accordion{ padding:16px 24px 30px; }
+  }
+
+  /* ===== ready to book CTA ===== */
+  .book-cta-section{ padding:50px 60px 40px; }
+  .book-cta-box{
+    border:1.5px solid var(--red);
+    padding:44px 40px;
+    text-align:center;
+  }
+  .book-cta-box h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(24px, 2.6vw, 34px);
+    color:var(--red);
+    margin:0 0 22px;
+  }
+  .book-cta-box p{
+    font-size:16px;
+    line-height:1.5;
+    color:var(--red);
+    margin:0 0 26px;
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .book-cta-box p a{ color:#1a56db; }
+  .book-cta-box .cta-btn{
+    display:inline-block;
+    background:var(--red);
+    color:var(--white);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:15px;
+    padding:13px 26px;
+    text-decoration:none;
+    border-radius:3px;
+  }
+
+  @media (max-width:700px){
+    .book-cta-section{ padding:36px 24px 30px; }
+    .book-cta-box{ padding:32px 24px; }
+  }
+
+  /* ===== college cards ===== */
+  .colleges-section{ padding:10px 60px 60px; }
+  .colleges-section h2{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:clamp(26px, 3vw, 38px);
+    margin:0 0 30px;
+    color:var(--dark);
+  }
+  .college-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+  }
+  .college-card{ display:flex; flex-direction:column; }
+  .college-card .college-photo{
+    width:100%;
+    aspect-ratio:546/249;
+    overflow:hidden;
+  }
+  .college-card .college-photo img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .college-card h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-weight:700;
+    font-size:26px;
+    color:var(--dark);
+    margin:20px 0 12px;
+  }
+  .college-card p{
+    font-size:15px;
+    line-height:1.55;
+    color:#333;
+    margin:0 0 20px;
+    flex:1;
+  }
+  .college-card .cta-btn{
+    display:inline-block;
+    align-self:flex-start;
+    background:var(--red);
+    color:var(--white);
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:700;
+    font-size:14px;
+    padding:11px 20px;
+    text-decoration:none;
+    border-radius:3px;
+  }
+
+  @media (max-width:900px){
+    .colleges-section{ padding:10px 24px 50px; }
+    .college-grid{ grid-template-columns:1fr; gap:36px; }
+  }
+
+  /* ===== site footer ===== */
+  .site-footer{
+    background:#1a1a1a;
+    color:#ffffff;
+    padding:40px 60px 34px;
+  }
+  .footer-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-bottom:26px;
+  }
+  .footer-partner{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .footer-partner span{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:#ffffff;
+  }
+  .footer-partner .into-logo{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .footer-partner .into-logo span.into-text{
+    font-family:'Poppins', Arial, sans-serif;
+    font-weight:800;
+    font-size:28px;
+    letter-spacing:.5px;
+    color:#ffffff;
+  }
+  .footer-partner .into-logo svg{ width:30px; height:30px; }
+  .footer-social{ display:flex; gap:10px; }
+  .footer-social a{
+    width:34px; height:34px;
+    border-radius:3px;
+    background:#ffffff;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .footer-social svg{ width:16px; height:16px; fill:#1a1a1a; }
+  .footer-legal p{
+    font-size:15px;
+    line-height:1.5;
+    margin:0 0 22px;
+    color:#ffffff;
+  }
+  .footer-legal p strong{ font-weight:700; }
+  .footer-bottom{
+    padding-top:6px;
+    font-size:14px;
+    color:#ffffff;
+  }
+  .footer-bottom a{
+    color:#ffffff;
+    text-decoration:underline;
+  }
+  @media (max-width:900px){
+    .site-footer{ padding:32px 24px 26px; }
+    .footer-top{ flex-wrap:wrap; gap:16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="utility-bar">
+  <div class="utility-logo">
+    <img src="./Screenshot 2026-07-17 145528.png" alt="International Study Centre | Lancaster University">
+  </div>
+
+  <div class="search-box">
+    <input type="text" placeholder="Search programmes">
+    <button aria-label="Search">
+      <svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="6.5" fill="none" stroke-width="2"/><line x1="14" y1="14" x2="19" y2="19" stroke-width="2"/></svg>
+    </button>
+  </div>
+
+  <div class="utility-spacer"></div>
+
+  <div class="right-controls">
+    <a href="#" class="apply-btn">Apply</a>
+    <div class="lang-select">
+      <svg class="globe" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke-width="1.5"/><path d="M2 10h16M10 2c2.5 2.5 2.5 13 0 16M10 2c-2.5 2.5-2.5 13 0 16" stroke-width="1.5"/></svg>
+      <span>En</span>
+      <svg class="chev" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+  </div>
+</div>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-item" data-menu="about">
+    About
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsitabout.html">Student success</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="study">
+    Study
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitourwebsiteug.html">Undergraduate</a>
+      <a href="./visitwebsitepg.html">Postgraduate</a>
+      <a href="./visitwebsiteenglish.html">English Language</a>
+      <a href="./visitwebsiteteacher.html">Your teachers</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="student-life">
+    Student life
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsiteliving.html">Living</a>
+      <a href="./visitwebsiteaccomadation.html">Accommodation</a>
+      <a href="./visitwebsiteemployabily.html">Employability</a>
+    </div>
+  </div>
+
+  <div class="nav-item" data-menu="support">
+    Support
+    <svg class="chevron" viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    <div class="dropdown">
+      <a href="./visitwebsitetution.html">Tuition and scholarships</a>
+      <a href="./visitwebsitearrival.html">Pre-arrival</a>
+      <a href="./visitwebsiteapply.html">How to apply</a>
+      <a href="./visitwebsitevisa.html">Visa</a>
+    </div>
+  </div>
+
+  <div class="nav-item no-caret" data-menu="">
+    <a href="./visitcontact.html">Contact</a>
+  </div>
+</nav>
+
+<div class="banner">
+  <img src="./Screenshot 2026-07-17 152958.png" alt="Aerial view of Lancaster University accommodation and colleges">
+</div>
+
+<div class="page-intro">
+  <h1>Find your home at Lancaster</h1>
+  <p>Nine colleges. Nine inclusive communities. One home away from home.</p>
+  <a href="#" class="explore-btn-top">Explore</a>
+</div>
+
+<div class="accom-section">
+  <h2>Your accommodation options</h2>
+  <p>Lancaster University's unique collegiate system is at the heart of your student experience. Each of our nine colleges is more than just a place to live – it's a close-knit community where you'll find friends, support and a sense of belonging.</p>
+  <p>With their own social spaces, sports teams, traditions and accommodation, the colleges create smaller, welcoming communities that enrich your time at university. You'll find all the colleges located on campus, so everything you need – including the study centre, university facilities and your classes – is within walking distance.</p>
+  <p>Wherever you live, your college will become your university family – a support network that stays with you for life.</p>
+
+  <div class="testimonial-video" id="vaibhaviVideoWrap" onclick="playVaibhaviVideo()">
+    <video id="vaibhaviVideo" poster="./NCL-hero-accommodation-thumbnail-video.avif" playsinline>
+      <source src="./vaibhavi-testimonial.mp4" type="video/mp4">
+    </video>
+    <div class="video-play-btn" id="vaibhaviPlayBtn">
+      <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="#ffffff"/></svg>
+    </div>
+    <div class="name-bar">
+      <span>Vaibhavi</span>
+    </div>
+  </div>
+</div>
+
+<div class="gallery-section">
+  <div class="gallery-strip" id="galleryStrip">
+    <div class="gallery-thumb" data-index="0">
+      <img src="./gallery-LAN-accommodation-breakout.avif" alt="Students socialising in a courtyard common area">
+    </div>
+    <div class="gallery-thumb" data-index="1">
+      <img src="./gallery-LAN-accommodation-friends.avif" alt="Two students chatting on a bed in student accommodation">
+    </div>
+    <div class="gallery-thumb active" data-index="2" onclick="playVaibhaviVideo(); document.querySelector('.accom-section').scrollIntoView({behavior:'smooth'});">
+      <img src="./NCL-hero-accommodation-thumbnail-video.avif" alt="Vaibhavi's accommodation video thumbnail">
+      <div class="thumb-play">
+        <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="#ffffff"/></svg>
+      </div>
+      <div class="thumb-caption">
+        <span>Vaibhavi</span>
+      </div>
+    </div>
+    <div class="gallery-thumb" data-index="3">
+      <img src="./LAN-gallery-accommodation-video-Flat-with-single-bedrooms-and-en-suite-facilities-thumbnail.avif" alt="Flat with single bedrooms and ensuite facilities">
+      <div class="thumb-play">
+        <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="#ffffff"/></svg>
+      </div>
+      <div class="thumb-caption">
+        <span>Flat with single bedrooms and ensuite facilities</span>
+      </div>
+    </div>
+    <div class="gallery-thumb" data-index="4">
+      <img src="./LAN-gallery-success-page-Men-Shiyu-video-thumbnail.avif" alt="Flat with single bedrooms and shared facilities">
+      <div class="thumb-play">
+        <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="#ffffff"/></svg>
+      </div>
+      <div class="thumb-caption">
+        <span>Flat with single bedrooms and shared facilities</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gallery-controls">
+    <div class="gallery-dots" id="galleryDots">
+      <div class="dot active" data-dot="0"></div>
+      <div class="dot" data-dot="1"></div>
+      <div class="dot" data-dot="2"></div>
+      <div class="dot" data-dot="3"></div>
+      <div class="dot" data-dot="4"></div>
+      <div class="dot" data-dot="5"></div>
+      <div class="dot" data-dot="6"></div>
+      <div class="dot" data-dot="7"></div>
+      <div class="dot" data-dot="8"></div>
+      <div class="dot" data-dot="9"></div>
+      <div class="dot" data-dot="10"></div>
+      <div class="dot" data-dot="11"></div>
+      <div class="dot" data-dot="12"></div>
+      <div class="dot" data-dot="13"></div>
+    </div>
+    <div class="gallery-arrows">
+      <button aria-label="Previous" onclick="scrollGallery(-1)">
+        <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button aria-label="Next" onclick="scrollGallery(1)">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="accordion">
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>Bedroom with ensuite bathroom</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>Bedroom with shared bathroom</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>Self-contained studio</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+  <div class="accordion-item" data-acc>
+    <div class="accordion-header">
+      <h3>Accommodation for under 18s</h3>
+      <svg viewBox="0 0 12 8"><path d="M1 1l5 5 5-5"/></svg>
+    </div>
+    <div class="accordion-panel"><p>Content coming soon.</p></div>
+  </div>
+</div>
+
+<div class="book-cta-section">
+  <div class="book-cta-box">
+    <h2>Ready to book?</h2>
+    <p>The Lancaster University Accommodation Team will get in touch with you once you've confirmed your place with us. Email us at <a href="mailto:isc-enquiries@lancaster.ac.uk">isc-enquiries@lancaster.ac.uk</a> if you have a question.</p>
+    <a href="mailto:isc-enquiries@lancaster.ac.uk" class="cta-btn">Email us</a>
+  </div>
+</div>
+
+<div class="colleges-section">
+  <h2>Undergraduate colleges</h2>
+  <div class="college-grid">
+    <div class="college-card">
+      <div class="college-photo">
+        <img src="./Screenshot 2026-07-17 141107.png" alt="Entrance to Bowland College">
+      </div>
+      <h3>Bowland College</h3>
+      <p>One of the oldest colleges located at the north of campus, with ensuite and shared bathroom options.</p>
+      <a href="#" class="cta-btn">Find out more</a>
+    </div>
+    <div class="college-card">
+      <div class="college-photo">
+        <img src="./Screenshot 2026-07-17 152859.png" alt="Cartmel College building surrounded by trees">
+      </div>
+      <h3>Cartmel College</h3>
+      <p>A college with some of the most beautiful views and largest social spaces on campus, offering ensuite rooms.</p>
+      <a href="#" class="cta-btn">Find out more</a>
+    </div>
+    <div class="college-card">
+      <div class="college-photo">
+        <img src="./Screenshot 2026-07-17 145329.png" alt="County College townhouses and grounds">
+      </div>
+      <h3>County College</h3>
+      <p>The university's biggest college with ensuite and shared bathroom options in townhouses.</p>
+      <a href="#" class="cta-btn">Find out more</a>
+    </div>
+    <div class="college-card">
+      <div class="college-photo">
+        <img src="./Screenshot 2026-07-17 152830.png" alt="Lonsdale College building with tree in courtyard">
+      </div>
+      <h3>Lonsdale College</h3>
+      <p>One of the oldest colleges located in the south-west of campus, offering ensuite rooms.</p>
+      <a href="#" class="cta-btn">Find out more</a>
+    </div>
+    <div class="college-card">
+      <div class="college-photo">
+        <img src="./Screenshot 2026-07-17 152849.png" alt="Pendle College modern building exterior">
+      </div>
+      <h3>Pendle College</h3>
+      <p>A college offering all three types of student accommodation.</p>
+      <a href="#" class="cta-btn">Find out more</a>
+    </div>
+  </div>
+</div>
+
+<div class="colleges-section postgrad-colleges-section">
+  <h2>Postgraduate college</h2>
+  <div class="college-grid">
+    <div class="college-card">
+      <div class="college-photo">
+        <img src="./Screenshot 2026-07-17 152859.png" alt="Graduate College townhouses with tree in foreground">
+      </div>
+      <h3>Graduate College</h3>
+      <p>A relaxed, friendly and diverse college offering ensuite bedrooms in a quieter university environment for postgraduate students from all over the world.</p>
+      <a href="#" class="cta-btn">Find out more</a>
+    </div>
+  </div>
+</div>
+
+<div class="accom-section booking-section">
+  <h2>How do I book my accommodation?</h2>
+  <p>Once you've confirmed your place to study with us, the Lancaster University Accommodation Team will get in touch to arrange your accommodation.</p>
+  <p><strong>If you're under 18 on the start date of your programme:</strong> we'll offer you a room in our designated under 18s area on campus. For October start dates, you'll receive this offer via email in August. For January start dates, you'll receive it in December.</p>
+  <p><strong>If you're over 18 on the start date of your programme:</strong> we'll ask you which room type you'd prefer. For October start dates, you'll receive an invite to select your preferences in June. For January start dates, you'll receive this in November.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-partner">
+      <span>IN PARTNERSHIP WITH</span>
+      <div class="into-logo">
+        <span class="into-text">INTO</span>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="none" stroke="#ffffff" stroke-width="1.6"/><polygon points="9,7 16,12 9,17" fill="#ffffff"/></svg>
+      </div>
+    </div>
+    <div class="footer-social">
+      <a href="https://www.facebook.com/lancasteruniversityisc/?locale=en_GB" target="_blank" aria-label="Facebook"><svg viewBox="0 0 38.49 67.56"><path d="M8.71,39.5v28.07h15.31v-28.07h11.42l2.37-12.91h-13.79v-4.57c0-6.82,2.68-9.43,9.6-9.43,2.15,0,3.88.05,4.88.16V1.05c-1.89-.52-6.51-1.05-9.17-1.05C15.21,0,8.71,6.67,8.71,21.04v5.55H0v12.91h8.71Z"/></svg></a>
+      <a href="https://www.instagram.com/lancasteruni_isc/" target="_blank" aria-label="Instagram"><svg viewBox="0 0 68.71 68.69"><path d="M61.14,54.6c-1.19,3-3.51,5.32-6.53,6.53-4.52,1.8-15.25,1.38-20.25,1.38s-15.74.4-20.25-1.38c-3-1.19-5.32-3.51-6.53-6.53-1.8-4.52-1.38-15.25-1.38-20.25s-.4-15.74,1.38-20.25c1.19-3,3.51-5.32,6.53-6.53,4.52-1.8,15.25-1.38,20.25-1.38s15.74-.4,20.25,1.38c3,1.19,5.32,3.51,6.53,6.53,1.8,4.52,1.38,15.25,1.38,20.25s.41,15.74-1.38,20.25M68.47,20.18c-.26-5.5-1.52-10.38-5.55-14.39C58.9,1.78,54.03.52,48.53.24,42.86-.08,25.85-.08,20.18.24c-5.49.26-10.36,1.52-14.39,5.53C1.76,9.79.52,14.67.24,20.17-.08,25.84-.08,42.84.24,48.51c.26,5.5,1.52,10.38,5.55,14.39,4.03,4.02,8.89,5.27,14.39,5.55,5.67.32,22.67.32,28.34,0,5.5-.26,10.38-1.52,14.39-5.55,4.02-4.02,5.27-8.89,5.55-14.39.32-5.67.32-22.65,0-28.32M56.8,16.01c0,2.29-1.84,4.11-4.11,4.11s-4.11-1.84-4.11-4.11,1.84-4.11,4.11-4.11,4.11,1.84,4.11,4.11M34.36,45.8c-6.3,0-11.45-5.14-11.45-11.45s5.14-11.45,11.45-11.45,11.45,5.14,11.45,11.45-5.15,11.45-11.45,11.45M34.36,16.73c-9.75,0-17.61,7.87-17.61,17.61s7.87,17.61,17.61,17.61,17.61-7.86,17.61-17.61-7.87-17.61-17.61-17.61"/></svg></a>
+    </div>
+  </div>
+
+  <div class="footer-legal">
+    <p><strong>INTO Lancaster Limited</strong>, trading as Lancaster University International Study Centre, is a limited liability partnership registered in England and Wales, registered number 14819227</p>
+    <p><strong>Registered Office:</strong> One Gloucester Place, Brighton, East Sussex, BN1 4AA, UK</p>
+    <p><strong>VAT registration number:</strong> 123 4160 57</p>
+    <p><strong>Education provider sponsor number 6FY6FQBV1</strong>, INTO Lancaster Limited is a teaching site on the Sponsor Licence of INTO Manchester Limited</p>
+  </div>
+
+  <div class="footer-bottom">
+    © Copyright 2026 | INTO UNIVERSITY PARTNERSHIPS LTD AND IUP 2 LLP <a href="#">沪ICP备14028023号-3</a> | <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Cookies Policy</a> | <a href="#">Governance</a> | <a href="#">Accessibility</a> | <a href="#">Modern Slavery</a>
+  </div>
+</footer>
+
+<script>
+  const items = document.querySelectorAll('.nav-item[data-menu]');
+  items.forEach(item => {
+    const menuName = item.getAttribute('data-menu');
+    if(!menuName) return;
+    item.addEventListener('click', (e) => {
+      const isOpen = item.classList.contains('open');
+      items.forEach(i => i.classList.remove('open'));
+      if(!isOpen){ item.classList.add('open'); }
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click', () => {
+    items.forEach(i => i.classList.remove('open'));
+  });
+
+  function playVaibhaviVideo(){
+    const video = document.getElementById('vaibhaviVideo');
+    const playBtn = document.getElementById('vaibhaviPlayBtn');
+    if(!video) return;
+    video.setAttribute('controls', '');
+    playBtn.classList.add('hidden');
+    video.play().catch(() => {
+      /* No video file loaded yet — replace the src in the <source> tag
+         (./vaibhavi-testimonial.mp4) with your actual video file to enable playback. */
+    });
+  }
+
+  const galleryStrip = document.getElementById('galleryStrip');
+  const galleryDots = document.querySelectorAll('#galleryDots .dot');
+  const galleryThumbs = document.querySelectorAll('.gallery-thumb');
+
+  function scrollGallery(direction){
+    galleryStrip.scrollBy({ left: direction * 254, behavior: 'smooth' });
+  }
+
+  galleryThumbs.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      galleryThumbs.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      const idx = parseInt(thumb.getAttribute('data-index'), 10);
+      galleryDots.forEach(d => d.classList.remove('active'));
+      if(galleryDots[idx]) galleryDots[idx].classList.add('active');
+    });
+  });
+
+  galleryDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      galleryDots.forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('[data-acc]').forEach(acc => {
+    acc.querySelector('.accordion-header').addEventListener('click', () => {
+      acc.classList.toggle('open');
+    });
+  });
+</script>
+</body>
+</html>

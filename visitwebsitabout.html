@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>International student success stories</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+  :root{
+    --maroon:#8a1538;
+    --maroon-dark:#6e1029;
+    --ink:#161616;
+    --body-text:#2b2b2b;
+    --paper:#ffffff;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:var(--paper); font-family:'Source Sans 3', sans-serif; }
+
+  .page{ max-width:1400px; margin:0 auto; }
+
+  /* ---- Hero banner ---- */
+  .hero{
+    width:100%;
+    height:420px;
+    overflow:hidden;
+  }
+  .hero img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+
+  /* ---- Content section ---- */
+  .content{
+    padding: 56px 6% 64px;
+  }
+  h1{
+    font-family:'Merriweather', serif;
+    font-weight:900;
+    font-size:clamp(32px, 4.4vw, 52px);
+    line-height:1.1;
+    color:var(--ink);
+    margin:0 0 24px;
+    max-width:900px;
+  }
+  p.lede{
+    font-size:19px;
+    line-height:1.55;
+    color:var(--body-text);
+    max-width:900px;
+    margin:0 0 32px;
+  }
+  .cta{
+    display:inline-block;
+    background:var(--maroon);
+    color:#fff;
+    font-weight:700;
+    font-size:16px;
+    text-decoration:none;
+    padding:15px 26px;
+    border-radius:2px;
+    letter-spacing:0.2px;
+    transition: background 0.15s ease;
+    border:none;
+    cursor:pointer;
+    font-family:'Source Sans 3', sans-serif;
+  }
+  .cta:hover{ background:var(--maroon-dark); }
+  .cta:focus-visible{ outline:3px solid #1a1a1a; outline-offset:3px; }
+
+  @media (max-width:640px){
+    .hero{ height:300px; }
+    .figures{ padding-left:36%; gap:1.6vw; }
+    .content{ padding:36px 6% 48px; }
+    p.lede{ font-size:17px; }
+  }
+
+  /* ---- Student journeys / video card section ---- */
+  .journeys{
+    padding: 0 6% 64px;
+  }
+  .journeys h2{
+    font-family:'Merriweather', serif;
+    font-weight:900;
+    font-size:clamp(26px, 3vw, 34px);
+    color:var(--ink);
+    margin:0 0 24px;
+  }
+  .video-card{
+    position:relative;
+    max-width:1080px;
+    aspect-ratio: 16/9;
+    background:#000;
+    overflow:hidden;
+    border-radius:2px;
+  }
+  .video-card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .video-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,
+      rgba(120,10,30,0.92) 0%,
+      rgba(140,15,35,0.78) 22%,
+      rgba(150,20,35,0.35) 42%,
+      rgba(0,0,0,0) 58%);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding: 0 0 0 6%;
+    color:#fff;
+  }
+  .video-overlay .name{
+    font-family:'Merriweather', serif;
+    font-weight:900;
+    font-size:clamp(28px, 3.2vw, 40px);
+    margin:0 0 8px;
+  }
+  .video-overlay .from{
+    font-size:17px;
+    margin:0 0 26px;
+  }
+  .video-overlay .meta{
+    font-size:16px;
+    line-height:1.6;
+    max-width:340px;
+  }
+  .video-overlay .meta strong{ font-weight:700; }
+  .video-overlay .meta p{ margin:0 0 10px; }
+
+  .play-btn{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:64px; height:64px;
+    border-radius:50%;
+    background:transparent;
+    border:3px solid #fff;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .play-btn svg{ width:22px; height:22px; margin-left:4px; fill:#fff; }
+
+  .video-controls{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    background:rgba(0,0,0,0.72);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:8px 16px;
+    font-size:13px;
+  }
+  .video-controls .progress{
+    flex:1;
+    height:3px;
+    background:rgba(255,255,255,0.35);
+  }
+  .video-controls .progress::after{
+    content:"";
+    display:block;
+    width:0%;
+    height:100%;
+    background:#fff;
+  }
+  .video-controls .icon{
+    width:18px; height:18px;
+    display:inline-block;
+  }
+  .video-caption{
+    max-width:1080px;
+    background:#efefef;
+    padding:20px 24px 28px;
+  }
+  .video-caption h3{
+    font-family:'Merriweather', serif;
+    font-weight:900;
+    font-size:19px;
+    color:var(--ink);
+    margin:0 0 12px;
+  }
+  .video-caption p{
+    font-size:16px;
+    line-height:1.6;
+    color:var(--body-text);
+    margin:0;
+  }
+
+  /* ---- Thumbnail selector row ---- */
+  .thumb-row{
+    display:flex;
+    gap:16px;
+    margin-top:24px;
+    flex-wrap:wrap;
+  }
+  .thumb{
+    position:relative;
+    width:290px;
+    aspect-ratio:16/9;
+    overflow:hidden;
+    border-radius:4px;
+    border:3px solid transparent;
+    cursor:pointer;
+    background:#000;
+  }
+  .thumb.active{
+    border-color:#2f6fed;
+    box-shadow:0 0 0 1px #2f6fed;
+  }
+  .thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .thumb-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,
+      rgba(120,10,30,0.92) 0%,
+      rgba(140,15,35,0.75) 30%,
+      rgba(150,20,35,0.25) 55%,
+      rgba(0,0,0,0) 72%);
+    color:#fff;
+    padding:10px 12px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+  }
+  .thumb-overlay .t-name{
+    font-family:'Merriweather', serif;
+    font-weight:900;
+    font-size:16px;
+    line-height:1.1;
+    margin:0 0 2px;
+  }
+  .thumb-overlay .t-from{
+    font-size:11px;
+    margin:0 0 8px;
+    opacity:0.95;
+  }
+  .thumb-overlay .t-meta{
+    font-size:10px;
+    line-height:1.4;
+    max-width:75%;
+  }
+  .thumb-overlay .t-meta strong{ font-weight:700; }
+  .thumb-play{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:40px; height:40px;
+    border-radius:50%;
+    border:2.5px solid #fff;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .thumb-play svg{ width:14px; height:14px; margin-left:2px; fill:#fff; }
+
+  @media (max-width:640px){
+    .thumb{ width:100%; max-width:340px; }
+  }
+
+  /* ---- Category profile cards section ---- */
+  .category{
+    padding: 8px 6% 64px;
+  }
+  .category h2{
+    font-family:'Merriweather', serif;
+    font-weight:900;
+    font-size:clamp(26px, 3vw, 34px);
+    color:var(--ink);
+    margin:0 0 24px;
+  }
+  .profile-grid{
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .profile-card{
+    width:420px;
+    max-width:100%;
+    border:1px solid #d8d8d8;
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .profile-card .photo{
+    width:100%;
+    aspect-ratio:16/10;
+    overflow:hidden;
+  }
+  .profile-card .photo img{
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .profile-card .body{
+    padding:20px 22px 26px;
+  }
+  .profile-card .p-name{
+    font-family:'Merriweather', serif;
+    font-weight:900;
+    font-size:24px;
+    color:var(--ink);
+    margin:0 0 16px;
+  }
+  .profile-card .p-name .loc{
+    font-family:'Source Sans 3', sans-serif;
+    font-weight:400;
+    font-size:16px;
+    color:#6a6a6a;
+    margin-left:6px;
+  }
+  .profile-card .quote{
+    font-size:16px;
+    line-height:1.6;
+    color:var(--body-text);
+    margin:0 0 18px;
+  }
+  .profile-card .p-meta{
+    font-size:15px;
+    color:#5c5c5c;
+    margin:0 0 6px;
+  }
+  @media (max-width:900px){
+    .profile-card{ width:100%; }
+  }
+
+  /* ---- Closing CTA box ---- */
+  .cta-box{
+    margin: 0 6% 0;
+    border: 2px solid var(--maroon);
+    padding: 40px 24px;
+    text-align:center;
+  }
+  .cta-box h2{
+    font-family:'Merriweather', serif;
+    font-weight:900;
+    font-size:clamp(24px, 3.2vw, 34px);
+    color:var(--maroon);
+    margin:0 0 24px;
+  }
+  .cta-box .cta{
+    font-size:15px;
+    padding:14px 24px;
+  }
+
+  /* ---- Footer ---- */
+  footer{
+    margin-top:56px;
+    background:#1a1a1a;
+    color:#fff;
+    padding:36px 6% 32px;
+  }
+  .footer-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+    padding-bottom:28px;
+  }
+  .partner{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .partner .label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    color:#cfcfcf;
+  }
+  .partner .into-logo{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Source Sans 3', sans-serif;
+    font-weight:900;
+    font-size:26px;
+    letter-spacing:0.5px;
+    color:#fff;
+  }
+  .partner .into-logo .ring{
+    width:30px; height:30px;
+    border-radius:50%;
+    border:2px solid #fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px;
+  }
+  .social-icons{
+    display:flex;
+    gap:14px;
+  }
+  .social-icons a{
+    width:34px; height:34px;
+    border-radius:6px;
+    background:#fff;
+    color:#1a1a1a;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .social-icons svg{ width:18px; height:18px; fill:#1a1a1a; }
+
+  .footer-legal{
+    border-top:1px solid #3a3a3a;
+    padding-top:24px;
+    font-size:14px;
+    line-height:1.7;
+    color:#e6e6e6;
+  }
+  .footer-legal p{ margin:0 0 16px; }
+  .footer-legal strong{ font-weight:700; color:#fff; }
+
+  .footer-bottom{
+    border-top:1px solid #3a3a3a;
+    margin-top:8px;
+    padding-top:20px;
+    font-size:13px;
+    color:#cfcfcf;
+  }
+  .footer-bottom a{
+    color:#e6e6e6;
+    text-decoration:underline;
+  }
+
+  /* ---- Top navigation bar ---- */
+  .navbar{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:34px;
+    padding: 18px 6%;
+    background:#fff;
+    font-family:'Source Sans 3', sans-serif;
+    border-bottom:1px solid #eee;
+  }
+  .nav-item{
+    position:relative;
+  }
+  .nav-item > button{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:17px;
+    font-weight:700;
+    color:var(--ink);
+    cursor:pointer;
+    padding:6px 2px;
+  }
+  .nav-item > a{
+    display:inline-block;
+    font-size:17px;
+    font-weight:700;
+    color:var(--ink);
+    text-decoration:none;
+    padding:6px 2px;
+  }
+  .nav-item > button .chev{
+    width:11px; height:11px;
+    transition: transform 0.15s ease;
+  }
+  .nav-item.open > button{
+    color:var(--maroon);
+  }
+  .nav-item.open > button .chev{
+    transform:rotate(180deg);
+  }
+  .nav-item.open > button::after,
+  .nav-item.open > a::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:-19px;
+    height:3px;
+    background:var(--maroon);
+  }
+  .nav-item{ padding-bottom:0; }
+
+  .dropdown{
+    display:none;
+    position:absolute;
+    top:calc(100% + 19px);
+    left:0;
+    min-width:230px;
+    background:#fff;
+    box-shadow:0 10px 24px rgba(0,0,0,0.18);
+    padding:8px 0;
+    z-index:20;
+  }
+  .nav-item.open .dropdown{ display:block; }
+  .dropdown a{
+    display:block;
+    padding:12px 22px;
+    font-size:16px;
+    color:var(--ink);
+    text-decoration:none;
+  }
+  .dropdown a:hover{
+    background:#f5f5f5;
+    color:var(--maroon);
+  }
+
+  @media (max-width:900px){
+    .navbar{ flex-wrap:wrap; gap:18px 22px; padding:16px 6%; }
+  }
+
+  /* ---- Top utility header ---- */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    padding: 16px 6%;
+    background:#fff;
+    font-family:'Source Sans 3', sans-serif;
+  }
+  .topbar-left{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .brand .isc{
+    font-size:13px;
+    line-height:1.25;
+    color:#4a4a4a;
+  }
+  .brand .divider{
+    width:1px;
+    height:38px;
+    background:#c9c9c9;
+  }
+  .brand .lu{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand .lu-text{
+    font-family:'Merriweather', serif;
+    font-weight:700;
+    font-size:19px;
+    line-height:1.15;
+    color:var(--ink);
+  }
+  .crest{
+    width:34px; height:34px;
+    flex-shrink:0;
+  }
+  .search-box{
+    display:flex;
+    align-items:center;
+    border:1.5px solid #c9c9c9;
+    max-width:340px;
+    width:100%;
+  }
+  .search-box input{
+    flex:1;
+    border:none;
+    outline:none;
+    padding:11px 14px;
+    font-size:15px;
+    font-family:inherit;
+    color:var(--ink);
+  }
+  .search-box button{
+    width:42px; height:42px;
+    background:var(--maroon);
+    border:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .search-box svg{ width:18px; height:18px; fill:#fff; }
+
+  .topbar-right{
+    display:flex;
+    align-items:center;
+    gap:22px;
+  }
+  .apply-btn{
+    border:1.5px solid var(--ink);
+    background:#fff;
+    color:var(--ink);
+    font-weight:700;
+    font-size:15px;
+    padding:10px 22px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .lang{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:15px;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .lang svg{ width:19px; height:19px; }
+  .lang .chev{ width:11px; height:11px; }
+
+  @media (max-width:900px){
+    .topbar{ flex-wrap:wrap; }
+    .search-box{ order:3; max-width:100%; }
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="brand">
+        <div class="isc">International<br>Study Centre</div>
+        <div class="divider"></div>
+        <div class="lu">
+          <div class="lu-text">Lancaster<br>University</div>
+          <svg class="crest" viewBox="0 0 40 40">
+            <path d="M20 2 L34 7 V19 C34 28 28 34 20 38 C12 34 6 28 6 19 V7 Z" fill="#f2f2f2" stroke="#8a1538" stroke-width="1.4"/>
+            <line x1="20" y1="5" x2="20" y2="35" stroke="#8a1538" stroke-width="1"/>
+            <line x1="8" y1="17" x2="32" y2="17" stroke="#8a1538" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+      <div class="search-box">
+        <input type="text" placeholder="Search programmes">
+        <button type="button" aria-label="Search">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5L20.5 19zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <button class="apply-btn" type="button">Apply</button>
+      <div class="lang">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 5.6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.6-4-9s1.5-6.5 4-9z"/></svg>
+        <span>En</span>
+        <svg class="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="nav-item">
+      <button type="button" onclick="toggleNav(this)">About
+        <svg class="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+      </button>
+      <div class="dropdown">
+        <a href="./visitwebsitabout.html">Student success</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button type="button" onclick="toggleNav(this)">Study
+        <svg class="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+      </button>
+      <div class="dropdown">
+        <a href="./visitourwebsiteug.html">Undergraduate</a>
+        <a href="./visitwebsitepg.html">Postgraduate</a>
+        <a href="./visitwebsiteenglish.html">English Language</a>
+        <a href="./visitwebsiteteacher.html">Your teachers</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button type="button" onclick="toggleNav(this)">Student life
+        <svg class="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+      </button>
+      <div class="dropdown">
+        <a href="./visitwebsiteliving.html">Living</a>
+        <a href="./visitwebsiteaccomadation.html">Accommodation</a>
+        <a href="./visitwebsiteemployabily.html">Employability</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <button type="button" onclick="toggleNav(this)">Support
+        <svg class="chev" viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>
+      </button>
+      <div class="dropdown">
+        <a href="./visitwebsitetution.html">Tuition and scholarships</a>
+        <a href="./visitwebsitearrival.html">Pre-arrival</a>
+        <a href="./visitwebsiteapply.html">How to apply</a>
+        <a href="./visitwebsitevisa.html">Visa</a>
+      </div>
+    </div>
+
+    <div class="nav-item">
+      <a href="./visitcontact.html">Contact</a>
+    </div>
+  </nav>
+
+  <script>
+    function toggleNav(btn){
+      const item = btn.closest('.nav-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.nav-item.open').forEach(el => el.classList.remove('open'));
+      if(!wasOpen){ item.classList.add('open'); }
+    }
+    document.addEventListener('click', function(e){
+      if(!e.target.closest('.nav-item')){
+        document.querySelectorAll('.nav-item.open').forEach(el => el.classList.remove('open'));
+      }
+    });
+  </script>
+
+  <div class="page">
+    <div class="hero">
+      <img src="./LAN-hero-success-page-desktop.avif" alt="Students standing outside a university building on a sunny day">
+    </div>
+
+    <div class="content">
+      <h1>International student success stories</h1>
+      <p class="lede">Every success story starts with a first step &ndash; and these students took theirs at our International Study Centre. Now, they&rsquo;re thriving at Lancaster University and the future looks bright.</p>
+      <button class="cta">Hear from our students</button>
+    </div>
+
+    <div class="journeys">
+      <h2>Discover our students&rsquo; journeys</h2>
+
+      <div class="video-card">
+        <img src="./Screenshot 2026-07-17 143223.png" alt="Betina, International Foundation student from Brazil">
+        <div class="video-overlay">
+          <div class="name">Betina</div>
+          <div class="from">From Brazil</div>
+          <div class="meta">
+            <p><strong>Pathway:</strong> International Foundation</p>
+            <p><strong>Degree:</strong> BA (Hons) Film and Theatre</p>
+          </div>
+        </div>
+        <button class="play-btn" aria-label="Play video">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div class="video-controls">
+          <span>&#9654;</span>
+          <span>0:00 / 0:54</span>
+          <span class="progress"></span>
+          <span>&#128266;</span>
+          <span>&#x26F6;</span>
+        </div>
+      </div>
+
+      <div class="video-caption">
+        <h3>Betina | Brazil</h3>
+        <p>&ldquo;Studying in Lancaster has changed me in more ways than I could have imagined. I would 100% recommend stepping out of your comfort zone and experiencing life in a different country.&rdquo;</p>
+      </div>
+
+      <div class="thumb-row">
+        <div class="thumb active">
+          <img src="./Screenshot 2026-07-17 143223.png" alt="Betina, from Brazil">
+          <div class="thumb-overlay">
+            <div class="t-name">Betina</div>
+            <div class="t-from">From Brazil</div>
+            <div class="t-meta"><strong>Pathway:</strong> International Foundation<br><strong>Degree:</strong> BA (Hons) Film and Theatre</div>
+          </div>
+          <div class="thumb-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+
+        <div class="thumb">
+          <img src="./LAN-gallery-success-page-Mariyah-video-thumbnail.avif" alt="Mariyah, from Saudi Arabia">
+          <div class="thumb-overlay">
+            <div class="t-name">Mariyah</div>
+            <div class="t-from">From Saudi Arabia</div>
+            <div class="t-meta"><strong>Pathway:</strong> International Foundation<br><strong>Degree:</strong> BA (Hons) Architecture</div>
+          </div>
+          <div class="thumb-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+
+        <div class="thumb">
+          <img src="./LAN-gallery-success-page-Men-Shiyu-video-thumbnail.avif" alt="Wen Shiyu, from Mainland China">
+          <div class="thumb-overlay">
+            <div class="t-name">Wen Shiyu</div>
+            <div class="t-from">From Mainland China</div>
+            <div class="t-meta"><strong>Pathway:</strong> International Foundation<br><strong>Degree:</strong> MA Human Resources and Consulting</div>
+          </div>
+          <div class="thumb-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category">
+      <h2>Business</h2>
+      <div class="profile-grid">
+
+        <div class="profile-card">
+          <div class="photo"><img src="./LAN-card-image-testimonial-Pinyu.avif" alt="Pin-Yu"></div>
+          <div class="body">
+            <div class="p-name">Pin-Yu <span class="loc">| Taiwan, China</span></div>
+            <p class="quote">&ldquo;Studying here isn&rsquo;t just about learning English or earning a degree &ndash; it&rsquo;s about discovering how to create a sustainable career. I want to work for a company that values sustainability and purpose, not just profit. That&rsquo;s what motivates me every day.&rdquo;</p>
+            <p class="p-meta">Pathway: Pre-Master&rsquo;s</p>
+            <p class="p-meta">Degree: MSc Logistics and Supply Chain Management</p>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="photo"><img src="./LAN-card-image-testimonial-Jesse-Taiwan.avif" alt="Jesse"></div>
+          <div class="body">
+            <div class="p-name">Jesse <span class="loc">| Taiwan, China</span></div>
+            <p class="quote">&ldquo;My teachers have been really helpful. They genuinely care about your thoughts and opinions instead of just teaching straight from the book. I appreciate how they help you grow and reach your full potential.&rdquo;</p>
+            <p class="p-meta">Pathway: Pre-Master&rsquo;s</p>
+            <p class="p-meta">Degree: MSc Project Management</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="category">
+      <h2>Engineering and sciences</h2>
+      <div class="profile-grid">
+
+        <div class="profile-card">
+          <div class="photo"><img src="./INTO_LAN_ISC_IF_Amran_Testimonial_photo.avif" alt="Amran"></div>
+          <div class="body">
+            <div class="p-name">Amran <span class="loc">| Ethiopia</span></div>
+            <p class="quote">&ldquo;My foundation course helped me get into one of the best universities for astrophysics. As a child, I was told I&rsquo;d be a doctor &ndash; but I looked at the moon and thought, &lsquo;I want to be there.&rsquo; That&rsquo;s when my dream started.&rdquo;</p>
+            <p class="p-meta">Pathway: International Foundation</p>
+            <p class="p-meta">Degree: BSc (Hons) Astrophysics</p>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="photo"><img src="./LAN-card-image-testimonial-Safa.avif" alt="Safa"></div>
+          <div class="body">
+            <div class="p-name">Safa <span class="loc">| Nigeria</span></div>
+            <p class="quote">&ldquo;The support, education and environment here are amazing. The curriculum is designed to prepare you for university life in a balanced way. It&rsquo;s not overwhelming, but it&rsquo;s challenging enough to push you to improve.&rdquo;</p>
+            <p class="p-meta">Pathway: International Foundation</p>
+            <p class="p-meta">Degree: MSci Software Engineering (With Industrial Experience)</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="category">
+      <h2>Other top subjects</h2>
+      <div class="profile-grid">
+
+        <div class="profile-card">
+          <div class="photo"><img src="./LAN-card-image-testimonial-Anas.avif" alt="Anas"></div>
+          <div class="body">
+            <div class="p-name">Anas <span class="loc">| Kuwait</span></div>
+            <p class="quote">&ldquo;The university&rsquo;s rankings are really impressive. It&rsquo;s in the UK top 10 &ndash; and the linguistics courses are ranked even higher. Developing a background in media on my foundation course made it easier to engage with the content of my degree.&rdquo;</p>
+            <p class="p-meta">Pathway: International Foundation</p>
+            <p class="p-meta">Degree: BA (Hons) English Language and Linguistics</p>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <div class="photo"><img src="./LAN-card-image-testimonial-Frederick.avif" alt="Frederick"></div>
+          <div class="body">
+            <div class="p-name">Frederick <span class="loc">| Kenya</span></div>
+            <p class="quote">&ldquo;Studying in the UK gives you better opportunities and opens more doors for you. The support here has been really helpful &ndash; during Welcome Week, they even took us into town to show us which bus stops to use!&rdquo;</p>
+            <p class="p-meta">Pathway: International Foundation</p>
+            <p class="p-meta">Degree: LLB (Hons) Law</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="cta-box">
+      <h2>Discover your path to Lancaster University</h2>
+      <button class="cta">Explore study options</button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-top">
+      <div class="partner">
+        <span class="label">IN PARTNERSHIP WITH</span>
+        <div class="into-logo">INTO<span class="ring">&raquo;</span></div>
+      </div>
+      <div class="social-icons">
+        <a href="#" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M13 22v-9h3l1-4h-4V6.5c0-1.1.3-1.9 2-1.9H17V1.1C16.7 1 15.6 1 14.3 1 11.6 1 9.7 2.7 9.7 5.6V9H7v4h2.7v9H13z"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 2 .3 2.5.5.6.2 1 .5 1.5 1 .4.4.7.8 1 1.5.2.5.4 1.3.5 2.5.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 2-.5 2.5-.2.6-.5 1-1 1.5-.4.4-.8.7-1.5 1-.5.2-1.3.4-2.5.5-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-2-.3-2.5-.5-.6-.2-1-.5-1.5-1-.4-.4-.7-.8-1-1.5-.2-.5-.4-1.3-.5-2.5C2.1 15.6 2.1 15.2 2.1 12s0-3.6.1-4.9c.1-1.2.3-2 .5-2.5.2-.6.5-1 1-1.5.4-.4.8-.7 1.5-1 .5-.2 1.3-.4 2.5-.5C8.9 2.2 9.3 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1 0-1.6.2-1.9.4-.5.2-.8.4-1.2.7-.3.3-.5.7-.7 1.2-.1.3-.3.9-.4 1.9-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c0 1 .2 1.6.4 1.9.2.5.4.8.7 1.2.3.3.7.5 1.2.7.3.1.9.3 1.9.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1 0 1.6-.2 1.9-.4.5-.2.8-.4 1.2-.7.3-.3.5-.7.7-1.2.1-.3.3-.9.4-1.9.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c0-1-.2-1.6-.4-1.9-.2-.5-.4-.8-.7-1.2-.3-.3-.7-.5-1.2-.7-.3-.1-.9-.3-1.9-.4-1.2-.1-1.6-.1-4.7-.1zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4zm5.2-2a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <p><strong>INTO Lancaster Limited</strong>, trading as Lancaster University International Study Centre, is a limited liability partnership registered in England and Wales, registered number 14819227</p>
+      <p><strong>Registered Office:</strong> One Gloucester Place, Brighton, East Sussex, BN1 4AA, UK</p>
+      <p><strong>VAT registration number:</strong> 123 4160 57</p>
+      <p><strong>Education provider sponsor number 6FY6FQBV1</strong>, INTO Lancaster Limited is a teaching site on the Sponsor Licence of INTO Manchester Limited</p>
+    </div>
+
+    <div class="footer-bottom">
+      &copy; Copyright 2026 | INTO UNIVERSITY PARTNERSHIPS LTD AND IUP 2 LLP <a href="#">&#27818;ICP&#22791;14028023&#21495;-3</a> | <a href="#">Privacy</a> | <a href="#">Terms</a> | <a href="#">Cookies Policy</a> | <a href="#">Governance</a> | <a href="#">Accessibility</a> | <a href="#">Modern Slavery</a>
+    </div>
+  </footer>
+</body>
+</html>
